@@ -1,18 +1,37 @@
 # docker-log-viewer packages
 
-Public apt / yum (dnf) repository for **docker-log-viewer**.
+Public **apt** and **dnf/yum** repository for [docker-log-viewer](https://github.com/GovindSingh9447/docker-log-viewer).
 
-Source code lives in a separate **private** repo. This repo only hosts installable
-`.deb` / `.rpm` trees on GitHub Pages (`gh-pages`).
+Source code is private. This repository only hosts installable packages on GitHub Pages.
 
-Site is published automatically by the private repo’s release workflow.
+## Install
 
-## Enable Pages (one-time)
+**Site:** https://govindsingh9447.github.io/docker-log-viewer-packages/
 
-1. **Settings → Pages**
-2. Source: **Deploy from a branch**
-3. Branch: **`gh-pages`** / **`/`** → Save
+```bash
+# Debian / Ubuntu
+curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-apt.sh | sudo bash
+sudo apt-get install docker-log-viewer
 
-After the first release publish, open:
+# RHEL / Fedora / Rocky
+curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-yum.sh | sudo bash
+sudo dnf install docker-log-viewer
+```
 
-`https://<owner>.github.io/<this-repo-name>/`
+Then:
+
+```bash
+sudo nano /etc/docker-log-viewer/docker-log-viewer.env
+sudo systemctl enable --now docker-log-viewer
+```
+
+## Branches
+
+| Branch | Contents |
+|--------|----------|
+| `main` | This README |
+| `gh-pages` | Generated apt/yum tree + install site (updated by CI on each release) |
+
+## Related docs
+
+Install guide and packaging notes live in the private source repository (`docs/INSTALL.md`, `PACKAGING.md`).
