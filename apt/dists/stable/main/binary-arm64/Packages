@@ -1,0 +1,391 @@
+Package: docker-log-viewer
+Version: 0.1.0
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.0_arm64.deb
+Size: 3181738
+MD5sum: 9e0471fe71b94819ec5ba64d99ea1691
+SHA1: d81cd3de90508ca9570ab4513cd4fbf1b848d856
+SHA256: 8f8b5f0a7e97df75e4c12fe989012d1e548e517adf0d0b5f283bced2a815f87e
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.1
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.1_arm64.deb
+Size: 3181726
+MD5sum: f1678b53e4e0cb526fa03601c7d2078a
+SHA1: 1af11219a88c6ec3a67196231114cf083c85ff02
+SHA256: e73ec8599d3a496360de4a55ded5af70fcdaf0e44cce363c4a4d54565588f537
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.10
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.10_arm64.deb
+Size: 3181738
+MD5sum: feb8be658a97ca292376d453f72eb026
+SHA1: a5bba4ba3abc14fed5e80b9168609bcbf1a2000f
+SHA256: eff857c309d3d76278d3b62ab4d64994342f0a9fe429b8f6193b701c2878912f
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.11
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7719
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.11_arm64.deb
+Size: 3181998
+MD5sum: 6866ea8321fff0f024dc622ce3a407f4
+SHA1: ceff36e71ce51ea5880db15781f76003a762af96
+SHA256: 1b8e1781f2c07984d8155dc71d6eb50be1ecccd6d6f57a9da2027c050c7c83e3
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.12
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7719
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.12_arm64.deb
+Size: 3181996
+MD5sum: e327c72d14a32dfdc01fe4669b8cab3e
+SHA1: 26b165e1a7477be7572d55995fbb61348f707501
+SHA256: 06ea89a4b657a6d3e4d489f00b812071c74d571856be5d4f4cdc88c4ce703a53
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.13
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7719
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.13_arm64.deb
+Size: 3181992
+MD5sum: 09da0dfdcfc7c6ca7b4df35f13f8d29b
+SHA1: 39d7b232f56009dfed4dd97f83ac1f68b6b961f1
+SHA256: 2b45c5ce0c81dba72b07742ca00a0a38fdfd535744feec86eec13edfc2268c59
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.14
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7741
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.14_arm64.deb
+Size: 3188128
+MD5sum: e76f541dc7db9c5477c013f96df13fdc
+SHA1: c7bcb887acd9e90a71135c6e8d1612386d772479
+SHA256: 925eac0b9ff98a1a709d94d2d6978d3b93dddb9a6d1b54ae9fb9877404d0d6a5
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.15
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7741
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.15_arm64.deb
+Size: 3188140
+MD5sum: d9b319c5c074a21b41ee555f19f28fb2
+SHA1: 98473f4bdbc6165beef99c1768e9495814a74a66
+SHA256: 164d1af1ce995f1fe051192d976ed80233d5da9c36e750a0fd83ecc5f325a038
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.2
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.2_arm64.deb
+Size: 3181722
+MD5sum: 9fc927325e7bc9c7cf12ba52bcf51c24
+SHA1: 8ba6923cfa3e55f3743a6a59a84409ed57ddbefa
+SHA256: f420c283d1230ddf9cd3bf6925144f88d06c37829053913431946e1d5ef0d4ae
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.3
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.3_arm64.deb
+Size: 3181738
+MD5sum: 123f180f02d1e7b371d56db8a1bbddae
+SHA1: 2a799d2b67fdefaa52ae81e615896da3fbea2822
+SHA256: d486c7a77f0fd084c38e73b052544ba89ec61d21c5fe89d442fd9008511db9d5
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.4
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.4_arm64.deb
+Size: 3181748
+MD5sum: fda9d1766a7fa4329832f2ce33445a3b
+SHA1: 5dd1df465d1b5c07d09d3b35a943673d9fed6933
+SHA256: 1a4ce2d2c9c67356854c98fed31941a34e9d32010b7756bee90266ec3097f97a
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.5
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.5_arm64.deb
+Size: 3181734
+MD5sum: cdf1054604784ea5fd36f46dd9801aa5
+SHA1: d15b5384a418f6df367896de83f49317859481cb
+SHA256: 89bdc3e547d9dce6dbd3949ea6a9c3edb9aaa18c0953eb71050c17d606d69ca5
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.6
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.6_arm64.deb
+Size: 3181746
+MD5sum: 28e544b479253ea6f5114bafef3d82be
+SHA1: 51cfe69a25d7091881a05fe6e2b9106f19dc89ff
+SHA256: afcaa2c3b70b5a291d40e85e7b4b4f72f3440e4ab655c5716556c7e102e5569f
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.7
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.7_arm64.deb
+Size: 3181738
+MD5sum: fe4619a4ba39f4373e94cf65e703bb60
+SHA1: 432987c62e0350d9dd7c0ec68c4e4d347190c217
+SHA256: a979535f3141fe13f7e2976f187946d5d08f64bee31572be8a176f54097affcf
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.8
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.8_arm64.deb
+Size: 3181742
+MD5sum: df7b3df71e2c5584b982c55e4acb89bb
+SHA1: 14ecf3b4dd147d9c467471fa093e664cd075e716
+SHA256: 0632f2340aaa83f34e7eaaa435334e01fbeee1305f62e34506709fa3c386f06d
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.1.9
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 7718
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.1.9_arm64.deb
+Size: 3181738
+MD5sum: 6643ef52a2d8842dfda66604e3c70844
+SHA1: e5d6c63d19f4cb2dc69f0522f5672d0bed2e02eb
+SHA256: cba099c014e11a6d8dcd6bba600a7d9af0802a988ed0601cabfe3e6b61f86907
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.2.0
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8000
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.2.0_arm64.deb
+Size: 3309242
+MD5sum: 1832ac302937a72ee5e33e5a4b012d6e
+SHA1: f898dfa0016728df9e225c56b9ce7753d1d186be
+SHA256: a106209c980e0db9f416e6d2a555a74307bfc5f5437926ea72aa544da035f9d9
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.2.1
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8001
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.2.1_arm64.deb
+Size: 3310146
+MD5sum: c27fa6e39b348f3ae07ccee419fbb41e
+SHA1: 2413b993f861c3803f5e14cd2fc84e74ad623762
+SHA256: 923c691c29e243f733d16b170b147b001eceea314fa773725ceb97e811ac48e5
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.2.2
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8001
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.2.2_arm64.deb
+Size: 3310162
+MD5sum: ca4978bb494fc82a3adf50bef2a85a1c
+SHA1: da7c384db7dd350b45a89580b8c9fe0f14b70afa
+SHA256: 81ab494bfce829eb1593eff7116aeaebe65197623a010af187952855cf015630
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.3.0
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8007
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.3.0_arm64.deb
+Size: 3311594
+MD5sum: 2155e765003e0d5651d58f6f6e2c512c
+SHA1: 586aafada7f2c74b605d5281697a2356539d4e81
+SHA256: 024dc3dc5473a4cc44f5c229f8981695ca25c8ea2185d6c116a77bf4ffe69c7e
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.4.0
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8021
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.4.0_arm64.deb
+Size: 3316760
+MD5sum: f3954610abfa93432cd4031de93e917f
+SHA1: 4fdff1eb43c4e6f8cb0ba357b42358a360874bc7
+SHA256: 625b9ad659042ea7e4b8e08d8a496b99921ceb8e249ade99651729e26b740f55
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: Lightweight Docker log viewer and compose stack manager.
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.5.0
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8044
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.5.0_arm64.deb
+Size: 3322136
+MD5sum: a07f3df60ce4073dc1e6ad569f5623a3
+SHA1: 9180a81dc4e7c6c0415c826ee74b49419b991bfc
+SHA256: 0dbbb23fa3b3ad0edecd39a6b1df4dbb421b9e81a7fd669453069af332dee31b
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: DockBeacon — lightweight Docker operations console (logs, metrics, Compose).
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+
+Package: docker-log-viewer
+Version: 0.5.1
+Architecture: arm64
+Maintainer: Govind Singh <noreply@users.noreply.github.com>
+Installed-Size: 8044
+Depends: systemd
+Filename: pool/main/d/docker-log-viewer/docker-log-viewer_0.5.1_arm64.deb
+Size: 3322134
+MD5sum: d34e23b80c9cba3b20148420995836a6
+SHA1: 859d61d4936758d5987a50213fa060945ba9bc5d
+SHA256: c418203bcf4698f02d64189f7d319af43eb40f303aa420b18ed1dcf86400c30b
+Section: admin
+Priority: optional
+Homepage: https://github.com/GovindSingh9447/docker-log-viewer
+Description: DockBeacon — lightweight Docker operations console (logs, metrics, Compose).
+ Supports standalone (UI+API) or agent (API-only) mode via APP_MODE.
+

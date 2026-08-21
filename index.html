@@ -1,0 +1,1575 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="description" content="Lightweight self-hosted Docker operations console for live logs, container metrics, and multi-host management. apt and dnf packages."/>
+  <meta name="theme-color" id="theme-color" content="#f4f7fb"/>
+  <title>DockBeacon</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2764%27%20height%3D%2764%27%20viewBox%3D%270%200%2064%2064%27%3E%0A%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2710%27%20fill%3D%27%232dd4bf%27%2F%3E%0A%3Ctext%20x%3D%2732%27%20y%3D%2742%27%20text-anchor%3D%27middle%27%20font-family%3D%27Arial%27%20font-size%3D%2726%27%20font-weight%3D%27700%27%20fill%3D%27%23ffffff%27%3EDL%3C%2Ftext%3E%0A%3C%2Fsvg%3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("dlv_site_theme") || "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <style>
+    :root, html[data-theme="dark"] {
+      --bg: #0b1220;
+      --bg2: #111a2b;
+      --panel: #141e30;
+      --panel-2: #1a2538;
+      --deep: #0a1220;
+      --inset: #0f1828;
+      --ours: #102820;
+      --ours-line: #1f5c52;
+      --ink: #f3f6fb;
+      --muted: #8fa0b5;
+      --line: #2a364c;
+      --teal: #2dd4bf;
+      --cyan: #38bdf8;
+      --coral: #fb7185;
+      --amber: #fbbf24;
+      --violet: #a78bfa;
+      --teal-ink: #042f2e;
+      --btn-hover: #203049;
+      --btn-primary-hover: #5eead4;
+      --btn-ghost-hover: #16324a;
+      --note-bg: #2a2310;
+      --note-line: #6b5724;
+      --note-ink: #f5e0a8;
+      --pre: #d5e8f0;
+      --pre-cmd: #d7e8ef;
+      --pkg: #b7c9d8;
+      --compare-ink: #d5e0eb;
+      --ico-bad: #7b8fa3;
+      --ico-teal-bg: #12352f;
+      --ico-teal-line: #1f5c52;
+      --ico-cyan-bg: #123348;
+      --ico-cyan-line: #1f5575;
+      --ico-coral-bg: #3a1c28;
+      --ico-coral-line: #6b3144;
+      --ico-amber-bg: #3a2f14;
+      --ico-amber-line: #6b5724;
+      --ico-violet-bg: #2a2248;
+      --ico-violet-line: #4a3d78;
+      --border-hover: #3d4d66;
+      --topbar: linear-gradient(90deg, #2dd4bf, #38bdf8 40%, #fb7185 75%, #fbbf24);
+      --hero-wash: linear-gradient(180deg, #0e1830 0%, #0b1220 38%, #0b1220 100%);
+      --theme-meta: #0b1220;
+    }
+    html[data-theme="light"] {
+      --bg: #f4f7fb;
+      --bg2: #e8eef6;
+      --panel: #ffffff;
+      --panel-2: #eef3f9;
+      --deep: #e8eef6;
+      --inset: #f0f4fa;
+      --ours: #e6f7f3;
+      --ours-line: #5ec4b0;
+      --ink: #122033;
+      --muted: #5a6b80;
+      --line: #d5dee9;
+      --teal: #0d9488;
+      --cyan: #0284c7;
+      --coral: #e11d48;
+      --amber: #d97706;
+      --violet: #7c3aed;
+      --teal-ink: #ffffff;
+      --btn-hover: #e2eaf3;
+      --btn-primary-hover: #0f766e;
+      --btn-ghost-hover: #e0f2fe;
+      --note-bg: #fff8e8;
+      --note-line: #f0d48a;
+      --note-ink: #7a5b12;
+      --pre: #1e3348;
+      --pre-cmd: #1e3348;
+      --pkg: #3d5166;
+      --compare-ink: #243447;
+      --ico-bad: #8494a8;
+      --ico-teal-bg: #d5f5ef;
+      --ico-teal-line: #5ec4b0;
+      --ico-cyan-bg: #dbeafe;
+      --ico-cyan-line: #7dd3fc;
+      --ico-coral-bg: #ffe4e6;
+      --ico-coral-line: #fda4af;
+      --ico-amber-bg: #fef3c7;
+      --ico-amber-line: #fcd34d;
+      --ico-violet-bg: #ede9fe;
+      --ico-violet-line: #c4b5fd;
+      --border-hover: #b8c5d6;
+      --topbar: linear-gradient(90deg, #0d9488, #0284c7 40%, #e11d48 75%, #d97706);
+      --hero-wash: linear-gradient(180deg, #e8f4f8 0%, #f4f7fb 42%, #f4f7fb 100%);
+      --theme-meta: #f4f7fb;
+    }
+    :root {
+      --font: "Sora", system-ui, sans-serif;
+      --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --pad: clamp(1.15rem, 4vw, 2.5rem);
+      --max: 72rem;
+      --radius: 14px;
+      --safe-b: env(safe-area-inset-bottom, 0px);
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font-family: var(--font);
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+      overflow-x: hidden;
+    }
+    .bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: var(--hero-wash);
+    }
+    .bg::after {
+      content: "";
+      position: absolute;
+      inset: 0 auto auto 0;
+      width: 100%;
+      height: 6px;
+      background: var(--topbar);
+    }
+    .bg-grid { display: none; }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    code { font-family: var(--mono); font-size: .86em; color: var(--teal); }
+
+    .wrap {
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      padding-left: var(--pad);
+      padding-right: var(--pad);
+    }
+
+    @keyframes rise {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: none; }
+    }
+    .anim { animation: rise .55s ease both; }
+    .d1 { animation-delay: .05s; }
+    .d2 { animation-delay: .1s; }
+    .d3 { animation-delay: .15s; }
+
+    /* Nav */
+    .nav-shell {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      padding-top: 6px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      width: min(100%, var(--max));
+      margin: 0 auto;
+      padding: .85rem var(--pad);
+      min-height: 3.75rem;
+    }
+    .logo {
+      display: inline-flex;
+      align-items: center;
+      gap: .6rem;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: .95rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .logo:hover { text-decoration: none; }
+    .logo-mark {
+      width: 1.85rem;
+      height: 1.85rem;
+      border-radius: 7px;
+      background: var(--teal);
+      display: grid;
+      place-items: center;
+      color: var(--teal-ink);
+      font-size: .68rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .nav-end {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: .15rem;
+      font-size: .875rem;
+      font-weight: 550;
+    }
+    .nav-links a {
+      color: var(--ink);
+      opacity: .72;
+      text-decoration: none;
+      padding: .45rem .7rem;
+      border-radius: 8px;
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .nav-links a:hover {
+      color: var(--ink);
+      opacity: 1;
+      background: var(--panel-2);
+      text-decoration: none;
+    }
+    .theme-toggle,
+    .nav-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.2rem;
+      height: 2.2rem;
+      padding: 0;
+      border-radius: 9px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--ink);
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+    .theme-toggle:hover,
+    .nav-toggle:hover { background: var(--panel-2); border-color: var(--border-hover); }
+    .theme-toggle svg,
+    .nav-toggle svg { width: 1.05rem; height: 1.05rem; display: block; }
+    .nav-toggle { display: none; }
+    .nav-toggle .icon-close { display: none; }
+    .nav.is-open .nav-toggle .icon-menu { display: none; }
+    .nav.is-open .nav-toggle .icon-close { display: block; }
+    html[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+    html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+    html:not([data-theme]) .theme-toggle .icon-moon { display: none; }
+    @media (max-width: 900px) {
+      .nav { flex-wrap: wrap; gap: .55rem; min-height: 3.5rem; }
+      .nav-toggle { display: inline-flex; }
+      .nav-links {
+        display: none;
+        flex-direction: column;
+        align-items: stretch;
+        flex-wrap: nowrap;
+        width: 100%;
+        order: 3;
+        padding: .15rem 0 .4rem;
+        gap: .3rem;
+      }
+      .nav.is-open .nav-links { display: flex; }
+      .nav-links a {
+        padding: .8rem .9rem;
+        font-size: .95rem;
+        opacity: 1;
+        background: var(--panel);
+        border: 1px solid var(--line);
+      }
+    }
+
+    /* Hero */
+    .hero {
+      padding: clamp(1.5rem, 6vw, 4rem) 0 1.5rem;
+      text-align: center;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      margin: 0 0 1.1rem;
+      padding: .4rem .8rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--teal);
+      font-size: .78rem;
+      font-weight: 600;
+    }
+    .eyebrow i {
+      width: .45rem;
+      height: .45rem;
+      border-radius: 50%;
+      background: var(--teal);
+    }
+    .hero-brand {
+      margin: 0 0 .65rem;
+      font-size: clamp(2.6rem, 8vw, 4.4rem);
+      font-weight: 800;
+      letter-spacing: -.045em;
+      line-height: 1.02;
+      color: var(--ink);
+    }
+    .hero-brand em {
+      font-style: normal;
+      color: var(--teal);
+    }
+    .hero h1 {
+      margin: 0 auto .9rem;
+      max-width: 24ch;
+      font-size: clamp(1.15rem, 2.8vw, 1.55rem);
+      font-weight: 500;
+      color: var(--muted);
+      letter-spacing: -.01em;
+      line-height: 1.35;
+    }
+    .hero-lede {
+      margin: 0 auto 1.5rem;
+      max-width: 34rem;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .7rem;
+      margin-bottom: 1.15rem;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      min-height: 3rem;
+      padding: .7rem 1.35rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--ink);
+      font: inherit;
+      font-weight: 650;
+      font-size: .95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background .15s ease, border-color .15s ease, color .15s ease;
+    }
+    .btn:hover { text-decoration: none; border-color: var(--border-hover); background: var(--btn-hover); }
+    .btn:active { transform: scale(.98); }
+    .btn.primary {
+      background: var(--teal);
+      color: var(--teal-ink);
+      border-color: var(--teal);
+    }
+    .btn.primary:hover { background: var(--btn-primary-hover); border-color: var(--btn-primary-hover); color: var(--teal-ink); }
+    .btn.ghost {
+      background: transparent;
+      border-color: var(--cyan);
+      color: var(--cyan);
+    }
+    .btn.ghost:hover { background: var(--btn-ghost-hover); }
+    .meta-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .55rem .9rem;
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--muted);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      padding: .3rem .65rem;
+      border-radius: 8px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      color: var(--cyan);
+    }
+    .badge strong { color: var(--ink); font-weight: 600; }
+
+    /* Color strip */
+    .swatches {
+      display: flex;
+      justify-content: center;
+      gap: .55rem;
+      margin: 1.5rem 0 .25rem;
+    }
+    .swatches span {
+      width: 2.4rem;
+      height: .45rem;
+      border-radius: 999px;
+    }
+    .swatches span:nth-child(1) { background: var(--teal); }
+    .swatches span:nth-child(2) { background: var(--cyan); }
+    .swatches span:nth-child(3) { background: var(--coral); }
+    .swatches span:nth-child(4) { background: var(--amber); }
+    .swatches span:nth-child(5) { background: var(--violet); width: 1.4rem; opacity: .7; }
+
+    /* Install command */
+    .cmd {
+      max-width: 44rem;
+      margin: 0 auto 2.25rem;
+    }
+    .cmd-tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .35rem;
+      padding: .3rem;
+      margin-bottom: .7rem;
+      border-radius: 10px;
+      background: var(--panel);
+      border: 1px solid var(--line);
+    }
+    .cmd-tab {
+      border: 0;
+      min-height: 2.5rem;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .cmd-tab[aria-selected="true"] {
+      background: var(--panel-2);
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .cmd-box {
+      position: relative;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      overflow: hidden;
+    }
+    .cmd-box[hidden] { display: none; }
+    .cmd-box::before {
+      content: "";
+      position: absolute;
+      inset: 0 0 auto 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--teal), var(--cyan), var(--coral));
+    }
+    .cmd-box pre {
+      margin: 0;
+      padding: 1.15rem 5rem 1.15rem 1.2rem;
+      font-family: var(--mono);
+      font-size: clamp(.72rem, 1.6vw, .84rem);
+      line-height: 1.7;
+      color: var(--pre-cmd);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      overflow-x: auto;
+      background: var(--deep);
+    }
+    .cmd-box .copy {
+      position: absolute;
+      top: .75rem;
+      right: .75rem;
+      min-height: 2.1rem;
+      padding: .35rem .8rem;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--teal);
+      font: inherit;
+      font-size: .74rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .cmd-hint {
+      margin: .7rem 0 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: .86rem;
+    }
+
+    /* Demo */
+    .demo {
+      margin: 0 0 3.5rem;
+    }
+    .demo-frame {
+      border-radius: 14px;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: var(--deep);
+    }
+    .demo-chrome {
+      display: flex;
+      align-items: center;
+      gap: .4rem;
+      padding: .7rem 1rem;
+      border-bottom: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .demo-chrome i {
+      width: .55rem;
+      height: .55rem;
+      border-radius: 50%;
+      display: block;
+    }
+    .demo-chrome i:nth-child(1) { background: #fb7185; }
+    .demo-chrome i:nth-child(2) { background: #fbbf24; }
+    .demo-chrome i:nth-child(3) { background: #2dd4bf; }
+    .demo-chrome span {
+      margin-left: .55rem;
+      font-family: var(--mono);
+      font-size: .7rem;
+      color: var(--muted);
+    }
+    .demo-frame img { display: block; width: 100%; height: auto; }
+    .demo-caption {
+      margin: .9rem 0 0;
+      text-align: center;
+      color: var(--muted);
+      font-size: .9rem;
+    }
+
+    /* Sections */
+    section.block { margin: 0 0 4rem; }
+    .section-head {
+      text-align: center;
+      margin: 0 0 1.75rem;
+    }
+    .section-head .tag {
+      display: inline-block;
+      margin-bottom: .65rem;
+      font-size: .75rem;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--coral);
+    }
+    .section-head h2 {
+      margin: 0 0 .45rem;
+      font-size: clamp(1.55rem, 3.5vw, 2.15rem);
+      font-weight: 750;
+      letter-spacing: -.03em;
+    }
+    .section-head p {
+      margin: 0 auto;
+      max-width: 34rem;
+      color: var(--muted);
+    }
+
+    /* Features — colorful tiles */
+    .features {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+    }
+    @media (min-width: 640px) { .features { grid-template-columns: 1fr 1fr; } }
+    @media (min-width: 980px) { .features { grid-template-columns: 1fr 1fr 1fr; } }
+    .feature {
+      position: relative;
+      padding: 1.3rem 1.25rem 1.35rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      overflow: hidden;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .feature:hover {
+      border-color: var(--border-hover);
+      background: var(--panel-2);
+    }
+    .feature .orb { display: none; }
+    .feature .icon {
+      width: 2.4rem;
+      height: 2.4rem;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      margin-bottom: .9rem;
+      font-size: 1.05rem;
+      border: 1px solid var(--line);
+      background: var(--inset);
+      color: var(--ink);
+    }
+    .feature:nth-child(1) .icon { background: var(--ico-teal-bg); color: var(--teal); border-color: var(--ico-teal-line); }
+    .feature:nth-child(2) .icon { background: var(--ico-cyan-bg); color: var(--cyan); border-color: var(--ico-cyan-line); }
+    .feature:nth-child(3) .icon { background: var(--ico-coral-bg); color: var(--coral); border-color: var(--ico-coral-line); }
+    .feature:nth-child(4) .icon { background: var(--ico-amber-bg); color: var(--amber); border-color: var(--ico-amber-line); }
+    .feature:nth-child(5) .icon { background: var(--ico-violet-bg); color: var(--violet); border-color: var(--ico-violet-line); }
+    .feature:nth-child(6) .icon { background: var(--ico-teal-bg); color: var(--teal); border-color: var(--ico-teal-line); }
+    .feature h3 {
+      margin: 0 0 .4rem;
+      font-size: 1.08rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+    }
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+      font-size: .92rem;
+    }
+
+    /* Compare */
+    .compare {
+      display: grid;
+      gap: 1.1rem;
+      max-width: 54rem;
+      margin: 0 auto;
+    }
+    @media (min-width: 760px) { .compare { grid-template-columns: 1fr 1fr; } }
+    .compare-col {
+      padding: 1.45rem 1.4rem 1.55rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .compare-col.ours {
+      border-color: var(--ours-line);
+      background: var(--ours);
+    }
+    .compare-head {
+      display: flex;
+      align-items: center;
+      gap: .55rem;
+      margin-bottom: 1.15rem;
+    }
+    .compare-head h3 {
+      margin: 0;
+      font-size: .78rem;
+      font-weight: 750;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .compare-col.ours .compare-head h3 { color: var(--teal); }
+    .compare-col ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: .85rem;
+    }
+    .compare-col li {
+      display: flex;
+      gap: .7rem;
+      align-items: flex-start;
+      color: var(--compare-ink);
+      font-size: .93rem;
+    }
+    .compare-col li .ico {
+      flex-shrink: 0;
+      width: 1.2rem;
+      height: 1.2rem;
+      margin-top: .1rem;
+    }
+    .ico.bad { color: var(--ico-bad); }
+    .ico.good { color: var(--teal); }
+
+    /* Docs */
+    .docs {
+      display: grid;
+      gap: 1.15rem;
+    }
+    @media (min-width: 920px) {
+      .docs { grid-template-columns: 1.3fr .9fr; align-items: start; }
+    }
+    .stack { display: grid; gap: 1.1rem; }
+    .panel {
+      padding: 1.25rem clamp(1rem, 2vw, 1.4rem);
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .panel h2 {
+      margin: 0 0 .3rem;
+      font-size: 1.15rem;
+      font-weight: 750;
+      letter-spacing: -.02em;
+    }
+    .sub { margin: 0 0 1rem; color: var(--muted); font-size: .92rem; }
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .3rem;
+      padding: .3rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      background: var(--inset);
+      border: 1px solid var(--line);
+    }
+    .tab {
+      border: 0;
+      min-height: 2.5rem;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--muted);
+      font: inherit;
+      font-weight: 650;
+      cursor: pointer;
+    }
+    .tab[aria-selected="true"] {
+      background: var(--panel-2);
+      color: var(--ink);
+      border: 1px solid var(--line);
+    }
+    .pane[hidden] { display: none; }
+    .block-item { margin: 0 0 1rem; }
+    .block-item:last-child { margin-bottom: 0; }
+    .block-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: .5rem;
+      margin-bottom: .4rem;
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 650;
+    }
+    .copy-inline {
+      border: 1px solid var(--line);
+      background: var(--panel-2);
+      color: var(--cyan);
+      font: inherit;
+      font-size: .72rem;
+      font-weight: 650;
+      padding: .35rem .7rem;
+      border-radius: 8px;
+      cursor: pointer;
+      min-height: 2rem;
+    }
+    pre.snippet {
+      margin: 0;
+      padding: 1rem 1.05rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--deep);
+      font-family: var(--mono);
+      font-size: clamp(.72rem, 1.5vw, .8rem);
+      line-height: 1.65;
+      color: var(--pre);
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+    }
+
+    .changelog { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+    .changelog > li {
+      padding: .9rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--inset);
+    }
+    .changelog .ver {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .5rem .75rem;
+      margin-bottom: .4rem;
+      font-family: var(--mono);
+      font-size: .8rem;
+    }
+    .changelog .ver b { color: var(--teal); }
+    .changelog .ver time { color: var(--muted); font-size: .72rem; }
+    .changelog ul { margin: 0; padding-left: 1.1rem; color: var(--muted); font-size: .88rem; }
+    .changelog ul li { margin: .25rem 0; }
+
+    .paths { list-style: none; margin: 0; padding: 0; display: grid; gap: .55rem; }
+    .paths li {
+      padding: .85rem .95rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--inset);
+    }
+    .paths .path {
+      display: block;
+      font-family: var(--mono);
+      font-size: .72rem;
+      color: var(--cyan);
+      word-break: break-all;
+      margin-bottom: .2rem;
+    }
+    .paths .desc { display: block; font-size: .86rem; color: var(--muted); }
+
+    .modes { display: grid; gap: .65rem; }
+    @media (min-width: 560px) { .modes { grid-template-columns: 1fr 1fr; } }
+    .mode {
+      padding: 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--inset);
+    }
+    .mode strong { display: block; margin-bottom: .25rem; }
+    .mode:first-child strong { color: var(--teal); }
+    .mode:last-child strong { color: var(--coral); }
+    .mode p { margin: 0; color: var(--muted); font-size: .88rem; }
+
+    details.pkgs {
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: var(--inset);
+    }
+    details.pkgs + details.pkgs { margin-top: .5rem; }
+    details.pkgs summary {
+      cursor: pointer;
+      list-style: none;
+      padding: .85rem 1rem;
+      font-weight: 650;
+    }
+    details.pkgs summary::-webkit-details-marker { display: none; }
+    details.pkgs summary::after { content: "+"; float: right; color: var(--muted); }
+    details.pkgs[open] summary::after { content: "–"; }
+    .pkg-list {
+      margin: 0;
+      padding: 0 1rem 1rem;
+      list-style: none;
+      font-family: var(--mono);
+      font-size: .7rem;
+      color: var(--pkg);
+      max-height: 14rem;
+      overflow: auto;
+    }
+    .pkg-list li { padding: .35rem 0; border-top: 1px solid var(--line); word-break: break-all; }
+    .browse { margin: .85rem 0 0; font-size: .9rem; color: var(--muted); }
+
+    .note {
+      margin: 0 0 2.5rem;
+      padding: 1rem 1.15rem;
+      border-radius: 10px;
+      border: 1px solid var(--note-line);
+      background: var(--note-bg);
+      color: var(--note-ink);
+      font-size: .9rem;
+    }
+    .note strong { color: var(--amber); }
+
+    .cta-end {
+      text-align: center;
+      padding: 3rem 0 1.5rem;
+      margin-bottom: 1.5rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .cta-end h2 {
+      margin: 0 0 .5rem;
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+      letter-spacing: -.03em;
+    }
+    .cta-end p {
+      margin: 0 auto 1.25rem;
+      max-width: 28rem;
+      color: var(--muted);
+    }
+
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: .75rem 1.25rem;
+      padding: 1.4rem 0 calc(2rem + var(--safe-b));
+      border-top: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .84rem;
+    }
+    footer a { color: var(--muted); }
+    footer a:hover { color: var(--teal); }
+
+    .arch {
+      display: grid;
+      gap: .75rem;
+      max-width: 44rem;
+      margin: 0 auto;
+    }
+    .arch-node {
+      text-align: center;
+      padding: 1rem 1.1rem;
+      border-radius: var(--radius);
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .arch-node strong { display: block; font-size: .95rem; }
+    .arch-node span { display: block; margin-top: .25rem; color: var(--muted); font-size: .82rem; }
+    .arch-node.control { border-color: var(--ours-line); background: var(--ours); }
+    .arch-arrow { text-align: center; color: var(--muted); font-size: .8rem; letter-spacing: .04em; }
+    .arch-hosts { display: grid; gap: .7rem; }
+    @media (min-width: 720px) { .arch-hosts { grid-template-columns: 1fr 1fr 1fr; } }
+    .arch-host {
+      padding: .9rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--inset);
+      text-align: center;
+      font-size: .86rem;
+    }
+    .arch-host b { display: block; color: var(--teal); margin-bottom: .2rem; }
+
+    .fit-table { width: 100%; border-collapse: collapse; font-size: .88rem; margin: 0 auto; max-width: 52rem; }
+    .fit-table th, .fit-table td { padding: .65rem .75rem; border: 1px solid var(--line); text-align: left; vertical-align: top; }
+    .fit-table th { background: var(--panel-2); color: var(--ink); font-weight: 650; }
+    .fit-table td { color: var(--muted); background: var(--panel); }
+    .fit-table .hl { color: var(--ink); font-weight: 650; }
+    .table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+
+    .sec-grid { display: grid; gap: 1rem; }
+    @media (min-width: 720px) { .sec-grid { grid-template-columns: 1fr 1fr; } }
+    .sec-card { padding: 1.15rem 1.2rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); }
+    .sec-card h3 { margin: 0 0 .4rem; font-size: 1rem; }
+    .sec-card p, .sec-card li { margin: 0; color: var(--muted); font-size: .9rem; }
+    .sec-card ul { margin: .45rem 0 0; padding-left: 1.15rem; }
+    .sec-card li { margin: .3rem 0; }
+
+    .prod-steps { list-style: none; margin: 0 auto; padding: 0; max-width: 44rem; display: grid; gap: .7rem; }
+    .prod-steps li {
+      padding: .95rem 1.1rem;
+      border-radius: 10px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+    }
+    .prod-steps strong { display: block; color: var(--ink); margin-bottom: .2rem; }
+    .prod-steps span { color: var(--muted); font-size: .9rem; }
+
+    .pkg-list a { color: var(--ink); text-decoration: none; }
+    .pkg-list a:hover { color: var(--teal); }
+    .pkg-arch {
+      display: inline-block;
+      margin-left: .45rem;
+      padding: .1rem .4rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: .72rem;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .walk { list-style: none; margin: .9rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .45rem; justify-content: center; }
+    .walk li {
+      padding: .35rem .7rem;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: var(--panel);
+      color: var(--muted);
+      font-size: .78rem;
+    }
+
+    /* Small screens: keep copy button from squeezing code blocks. */
+    @media (max-width: 520px) {
+      .cmd-box pre { padding-right: 3.3rem; }
+      .cmd-box .copy {
+        top: .6rem;
+        right: .6rem;
+      }
+      .snippet { overflow-x: auto; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="bg-grid" aria-hidden="true"></div>
+
+  <div class="nav-shell">
+    <nav class="nav anim">
+      <a class="logo" href="#">
+        <span class="logo-mark">DB</span>
+        DockBeacon
+      </a>
+      <div class="nav-links" id="site-nav">
+        <a href="#features">Features</a>
+        <a href="guide.html">Guide</a>
+        <a href="#architecture">Architecture</a>
+        <a href="#security">Security</a>
+        <a href="#install">Install</a>
+        <a href="#changelog">Changelog</a>
+        <a href="https://github.com/GovindSingh9447/docker-log-viewer-packages">GitHub</a>
+      </div>
+      <div class="nav-end">
+        <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle color theme" title="Toggle theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+          </svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/>
+          </svg>
+        </button>
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M4 7h16M4 12h16M4 17h16"/>
+          </svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="M6 6l12 12M18 6L6 18"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="wrap">
+    <header class="hero anim d1">
+      <p class="eyebrow"><i></i> Self-hosted · apt &amp; dnf · multi-host</p>
+      <p class="hero-brand">Dock<em>Beacon</em></p>
+      <h1>A lightweight Docker operations console — live logs, metrics, and multi-host agents</h1>
+      <p class="hero-lede">One browser tab instead of a pile of SSH sessions. Not a replacement for Loki or ELK — for “what is happening on my Docker hosts <em>right now</em>.”</p>
+      <div class="cta-row">
+        <a class="btn primary" href="#quick-install">Install in one command</a>
+        <a class="btn" href="guide.html">Read the guide</a>
+        <a class="btn ghost" href="https://github.com/GovindSingh9447/docker-log-viewer-packages">Star on GitHub</a>
+      </div>
+      <p class="meta-row">
+        <span class="badge">Latest <strong>v0.5.1</strong></span>
+        <span>amd64 · arm64</span>
+        <span>2026-08-21</span>
+      </p>
+      <div class="swatches" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    </header>
+
+    <div class="cmd anim d2" id="quick-install">
+      <div class="cmd-tabs" role="tablist" aria-label="Quick install">
+        <button class="cmd-tab" type="button" role="tab" id="qtab-apt" aria-selected="true" aria-controls="qpane-apt">apt</button>
+        <button class="cmd-tab" type="button" role="tab" id="qtab-dnf" aria-selected="false" aria-controls="qpane-dnf">dnf</button>
+      </div>
+      <div class="cmd-box" id="qpane-apt" role="tabpanel" aria-labelledby="qtab-apt">
+        <pre id="quick-apt">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-apt.sh | sudo bash
+sudo apt-get install docker-log-viewer</pre>
+        <button class="copy" type="button" data-copy="quick-apt">Copy</button>
+      </div>
+      <div class="cmd-box" id="qpane-dnf" role="tabpanel" aria-labelledby="qtab-dnf" hidden>
+        <pre id="quick-dnf">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-yum.sh | sudo bash
+sudo dnf install docker-log-viewer</pre>
+        <button class="copy" type="button" data-copy="quick-dnf">Copy</button>
+      </div>
+      <p class="cmd-hint">Quick install adds the repo. Prefer to inspect first? See <a href="#install">Install</a>. Then open <code>http://&lt;host&gt;:9447</code> — zero-config HTTP for lab and staging. Production uses an HTTPS reverse proxy in front of the same port.</p>
+    </div>
+
+    <figure class="demo anim d3">
+      <div class="demo-frame">
+        <div class="demo-chrome" aria-hidden="true">
+          <i></i><i></i><i></i>
+          <span>DockBeacon · live multi-container logs</span>
+        </div>
+        <img
+          src="demo.png"
+          width="1440"
+          height="900"
+          alt="DockBeacon UI with live merged container logs"
+          loading="eager"
+          decoding="async"
+        />
+      </div>
+      <figcaption class="demo-caption">Stream, merge, filter, and pretty-print JSON — without leaving the browser.</figcaption>
+      <ol class="walk" aria-label="Typical session">
+        <li>Login</li>
+        <li>Select host</li>
+        <li>Pick containers</li>
+        <li>Live stream</li>
+        <li>Regex filter</li>
+        <li>Pretty JSON</li>
+        <li>CPU / memory</li>
+        <li>Switch host</li>
+      </ol>
+    </figure>
+
+    <section class="block" id="features">
+      <div class="section-head">
+        <span class="tag">Features</span>
+        <h2>Everything you reach for at 2am</h2>
+        <p>Built for people who run real Docker hosts — not another cloud dashboard.</p>
+      </div>
+      <div class="features">
+        <article class="feature">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="icon">⚡</div>
+          <h3>Live log streams</h3>
+          <p>WebSocket tails with pause, reconnect, time ranges, and multi-container merge.</p>
+        </article>
+        <article class="feature">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="icon">{}</div>
+          <h3>Pretty JSON</h3>
+          <p>Toggle compact or indented JSON with bright syntax colors — regex search too.</p>
+        </article>
+        <article class="feature">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="icon">⧉</div>
+          <h3>Host groups</h3>
+          <p>Merge agents into one view. Group prod hosts and follow them together.</p>
+        </article>
+        <article class="feature">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="icon">▣</div>
+          <h3>CPU &amp; memory</h3>
+          <p>Live stats beside the logs, with simple history sparklines.</p>
+        </article>
+        <article class="feature">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="icon">⚙</div>
+          <h3>Stacks + RBAC</h3>
+          <p>Compose lifecycle, env edits, and viewer / operator / admin roles.</p>
+        </article>
+        <article class="feature">
+          <span class="orb" aria-hidden="true"></span>
+          <div class="icon">📦</div>
+          <h3>apt &amp; dnf</h3>
+          <p>systemd unit included. Open <code>http://&lt;host&gt;:9447</code> with no TLS setup. Flip <code>APP_MODE</code> between standalone and agent.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="why">
+      <div class="section-head">
+        <span class="tag">Compare</span>
+        <h2>Why not just <code>docker logs</code>?</h2>
+        <p>It’s perfect — until your third SSH tab, second host, and first “wait, which terminal was prod?” moment.</p>
+      </div>
+      <div class="compare">
+        <div class="compare-col">
+          <div class="compare-head">
+            <h3>docker logs</h3>
+          </div>
+          <ul>
+            <li>
+              <svg class="ico bad" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>One container at a time, per host</span>
+            </li>
+            <li>
+              <svg class="ico bad" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Pipe to grep and start over when you get it wrong</span>
+            </li>
+            <li>
+              <svg class="ico bad" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>JSON arrives as a wall of text</span>
+            </li>
+            <li>
+              <svg class="ico bad" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>Separate window for <code>docker stats</code></span>
+            </li>
+            <li>
+              <svg class="ico bad" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 7l6 6M13 7l-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+              <span>SSH into every machine</span>
+            </li>
+          </ul>
+        </div>
+        <div class="compare-col ours">
+          <div class="compare-head">
+            <h3>DockBeacon</h3>
+          </div>
+          <ul>
+            <li>
+              <svg class="ico good" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Many containers, merged across hosts</span>
+            </li>
+            <li>
+              <svg class="ico good" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Regex + level filters while streams keep running</span>
+            </li>
+            <li>
+              <svg class="ico good" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>Pretty JSON with syntax colors</span>
+            </li>
+            <li>
+              <svg class="ico good" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>CPU / memory charts next to the logs</span>
+            </li>
+            <li>
+              <svg class="ico good" viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="9" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 10.5l2.5 2.5L14 7.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              <span>One browser tab — UI + remote agents</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <p class="cmd-hint" style="margin-top:1.2rem;text-align:center">Not competing with Loki or ELK on analytics — see <a href="#fit">where this fits</a>.</p>
+    </section>
+
+    <section class="block" id="architecture">
+      <div class="section-head">
+        <span class="tag">Architecture</span>
+        <h2>Control plane + agents</h2>
+        <p>Multi-host log aggregation without standing up a centralized log-storage platform. Same package on every host — flip <code>APP_MODE</code>.</p>
+      </div>
+      <div class="arch">
+        <div class="arch-node">
+          <strong>Browser</strong>
+          <span>One tab for logs, metrics, stacks, and RBAC</span>
+        </div>
+        <div class="arch-arrow">HTTP :9447 (lab / staging) · HTTPS reverse proxy (production)</div>
+        <div class="arch-node control">
+          <strong>Control plane</strong>
+          <span>Standalone UI + API · RBAC · host groups · session cookie</span>
+        </div>
+        <div class="arch-arrow">HTTP or HTTPS / WebSocket · each agent authenticates locally</div>
+        <div class="arch-hosts">
+          <div class="arch-host"><b>Agent · prod-01</b>Docker Engine</div>
+          <div class="arch-host"><b>Agent · prod-02</b>Docker Engine</div>
+          <div class="arch-host"><b>Agent · prod-03</b>Docker Engine</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" id="fit">
+      <div class="section-head">
+        <span class="tag">Where it fits</span>
+        <h2>Not a Loki or ELK replacement</h2>
+        <p>Use this when you need to see what is happening across Docker hosts <em>right now</em>, without building a full observability stack.</p>
+      </div>
+      <div class="table-wrap">
+        <table class="fit-table">
+          <thead>
+            <tr><th>Tool</th><th>Best for</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>docker logs</code></td><td>Quick troubleshooting on one container</td></tr>
+            <tr><td>Dozzle</td><td>Lightweight real-time container logs</td></tr>
+            <tr><td class="hl">DockBeacon</td><td class="hl">Live multi-host operations: logs + metrics + Compose + RBAC</td></tr>
+            <tr><td>Loki</td><td>Centralized log storage and query</td></tr>
+            <tr><td>ELK / OpenSearch</td><td>Large-scale log analytics and search</td></tr>
+            <tr><td>Datadog</td><td>Full SaaS observability</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="block" id="security">
+      <div class="section-head">
+        <span class="tag">Security</span>
+        <h2>Stacks and env edits are privileged</h2>
+        <p>If this is reachable on a production network, a stolen session is more than log access — operators can restart containers and edit Compose / <code>.env</code>. Treat it like a host admin tool.</p>
+      </div>
+      <div class="sec-grid">
+        <article class="sec-card">
+          <h3>Authentication</h3>
+          <p>Login required. Passwords stored as bcrypt hashes. Sessions are HMAC-signed cookies: <code>HttpOnly</code>, <code>SameSite=Lax</code>, <code>Secure</code> via <code>COOKIE_SECURE=auto</code> (honors <code>X-Forwarded-Proto</code>), 24h TTL. Optional OIDC SSO. Login rate-limited. APIs also accept <code>X-Auth-Token</code>, Bearer, or HTTP Basic.</p>
+        </article>
+        <article class="sec-card">
+          <h3>RBAC</h3>
+          <ul>
+            <li><code>viewer</code> — logs, inspect (secrets masked), switch hosts</li>
+            <li><code>operator</code> — restart, Compose lifecycle, env edits, inspect secrets</li>
+            <li><code>admin</code> — operators plus user management and audit tail</li>
+          </ul>
+        </article>
+        <article class="sec-card">
+          <h3>Agents</h3>
+          <p>Each agent has its own users file. Agents <strong>require</strong> <code>CORS_ORIGINS</code> (fail closed when unset). The control-plane UI signs in per host.</p>
+        </article>
+        <article class="sec-card">
+          <h3>HTTP + reverse-proxy HTTPS</h3>
+          <p>Lab listens on <code>LISTEN_ADDR=0.0.0.0:9447</code> by default. Production: <code>LISTEN_ADDR=127.0.0.1</code> and terminate TLS on Nginx/ALB. No in-process TLS.</p>
+        </article>
+        <article class="sec-card">
+          <h3>Docker socket</h3>
+          <p>Packaged unit runs as <code>docker-log-viewer</code> in group <code>docker</code> (not root). Socket access is still full Engine power — optionally put <a href="https://github.com/Tecnativa/docker-socket-proxy">docker-socket-proxy</a> in front and set <code>DOCKER_HOST</code>.</p>
+        </article>
+        <article class="sec-card">
+          <h3>Secrets in .env / inspect</h3>
+          <p>Stack env keys matching password / token / key names are masked until revealed. Container inspect env is masked for viewers. Writes stay under <code>PROJECTS_DIR</code>.</p>
+        </article>
+        <article class="sec-card">
+          <h3>CSRF / CORS / sessions</h3>
+          <p>Double-submit CSRF (<code>dlv_csrf</code> + <code>X-CSRF-Token</code>) on mutating cookie-auth requests. WebSocket Origin checked against <code>CORS_ORIGINS</code>. Password changes require the current password.</p>
+        </article>
+        <article class="sec-card">
+          <h3>Audit + packages</h3>
+          <p>Privileged actions append JSON audit lines (<code>AUDIT_LOG_PATH</code>, also journal). Admins can <code>GET /api/audit</code>. Package repos are GPG-signed when <code>GPG_PRIVATE_KEY</code> is configured in release CI; otherwise SHA256SUMS + inspect-then-install.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="block" id="production">
+      <div class="section-head">
+        <span class="tag">Production</span>
+        <h2>Deploy it like a host console</h2>
+        <p>Same binary everywhere: HTTP on <code>:9447</code>. Lower environments open that URL directly. Production adds TLS at Nginx / ALB in front.</p>
+      </div>
+      <ol class="prod-steps">
+        <li><strong>Network isolation</strong><span>Set <code>LISTEN_ADDR=127.0.0.1</code> in production. Agents should not be reachable from the public internet — only from the control plane.</span></li>
+        <li><strong>Nginx / ALB + TLS</strong><span>Terminate HTTPS on the proxy and forward to <code>127.0.0.1:9447</code>. Enable WebSocket upgrade for <code>/wslogs</code> and <code>/ws/project/watch</code>. Set <code>COOKIE_SECURE=auto</code>.</span></li>
+        <li><strong>systemd</strong><span>Runs as <code>docker-log-viewer</code> (not root), group <code>docker</code>. Config: <code>/etc/docker-log-viewer/docker-log-viewer.env</code>. Data: <code>/var/lib/docker-log-viewer/</code>.</span></li>
+        <li><strong>Firewall</strong><span>Allow 443 to the proxy. Allow control-plane → agent :9447. Block 9447 from untrusted networks.</span></li>
+        <li><strong>Auth &amp; backups</strong><span>Seed <code>AUTH_USER</code>/<code>AUTH_PASS</code> only on first boot, or configure OIDC. Back up <code>/var/lib/docker-log-viewer/</code>. Optional: docker-socket-proxy to shrink Engine API surface.</span></li>
+        <li><strong>Upgrades</strong><span><code>apt-get install --only-upgrade docker-log-viewer</code> or <code>dnf upgrade</code>. Env file survives. Roll back from the package pool.</span></li>
+      </ol>
+      <p class="cmd-hint" style="margin-top:1rem;text-align:center">Step-by-step Nginx snippet and RBAC details: <a href="guide.html#production">User guide → Production</a>.</p>
+    </section>
+
+    <section class="block" id="install">
+      <div class="section-head">
+        <span class="tag">Install</span>
+        <h2>Ship it to your hosts</h2>
+        <p>apt or dnf, configure once, enable systemd.</p>
+      </div>
+      <div class="docs">
+        <div class="stack">
+          <section class="panel" id="changelog">
+            <h2>What's new</h2>
+            <p class="sub">Latest notes on this package feed.</p>
+            <ul class="changelog"><li><div class="ver"><b>v0.5.0</b><time datetime="2026-08-22">2026-08-22</time></div><ul><li>Product renamed to DockBeacon across UI, docs, systemd, and the packages site (package id remains docker-log-viewer).</li><li>Stacks redesign: project header, pill tabs, contextual actions, Edit-before-save, and backup-on-save.</li><li>Fix Env load failures from unreadable .env perms; clear stale Compose content on tab switch.</li><li>Preserve file ownership on save; fail loudly if backup cannot be written; accept comma-separated EXTRA_CONFIG_DIRS.</li><li>Settings as a full page; compact monitoring table; inspect env secrets masked by default.</li></ul></li><li><div class="ver"><b>v0.4.0</b><time datetime="2026-08-21">2026-08-21</time></div><ul><li>Compose editor: client-side YAML lint (js-yaml + offline fallback) with live error bar.</li><li>Unsaved-changes confirmation when leaving Stacks, switching tabs/projects, or toggling Reveal secrets.</li><li>Diff before save masks secret env values until unlocked.</li><li>Image pull streams layer progress into an on-page terminal drawer.</li><li>New-logs pill shows missed count and jump-to-bottom hint during live streams.</li></ul></li><li><div class="ver"><b>v0.3.0</b><time datetime="2026-08-21">2026-08-21</time></div><ul><li>UI polish as DockBeacon: fixed theme toggle (html+body, localStorage, sun/moon icon).</li><li>Settings modal sticky header/footer with ✕, Escape, and backdrop dismiss.</li><li>Primary / secondary / destructive button tokens; tooltips and ⌘K container search.</li><li>Clearer empty states; floating new-logs pill with missed-line count.</li></ul></li><li><div class="ver"><b>v0.2.2</b><time datetime="2026-08-20">2026-08-20</time></div><ul><li>Move app version beside the brand title in the header</li><li>docs(site): feature v0.2.0 changelog and document version badge</li></ul></li><li><div class="ver"><b>v0.2.0</b><time datetime="2026-08-21">2026-08-21</time></div><ul><li>Production hardening: non-root systemd user, LISTEN_ADDR, COOKIE_SECURE=auto, CSRF tokens, WS Origin checks, agent CORS fail-closed.</li><li>Audit log + GET /api/audit; login rate limit; inspect env secrets masked for viewers.</li><li>Optional OIDC SSO (OIDC_* env); AUTH_LOCAL=false for SSO-only.</li><li>GPG-signed apt/yum when GPG_PRIVATE_KEY is set in release CI.</li><li>App version visible in the UI header and on the login screen (API: /api/info, /api/me, /health, login).</li></ul></li><li><div class="ver"><b>v0.1.14</b><time datetime="2026-08-10">2026-08-10</time></div><ul><li>Packages site: architecture, security, production deploy, inspect-then-run install, SHA256SUMS, and filled package lists.</li><li>Regex filter toggle (.*) for advanced log search, saved in prefs and share links.</li><li>Pretty / compact JSON highlighting in the log stream (brace-matched, skips Laravel timestamps).</li><li>Optional host groups in Settings — merge logs across servers in the same group.</li><li>Metric sparklines on container stats with a fixed 0–100% scale.</li><li>Full-window expand focuses on the filter bar and logs only (Esc / e).</li><li>Packages site: light/dark themes, user guide, and Cloudflare Web Analytics.</li></ul></li><li><div class="ver"><b>v0.1.12</b><time datetime="2026-08-08">2026-08-08</time></div><ul><li>Packages site shows latest version badge and a What&#x27;s new changelog (including v0.1.11 UI fixes).</li></ul></li><li><div class="ver"><b>v0.1.11</b><time datetime="2026-08-08">2026-08-08</time></div><ul><li>Clearing or unchecking all containers resets header chips, title, live stream, and stats (no stale “N containers (merged)” labels).</li><li>View logs button stays readable on hover and when disabled (primary teal + white text).</li></ul></li></ul>
+            <p class="browse">
+              Upgrade: <code>sudo apt-get update && sudo apt-get install --only-upgrade docker-log-viewer</code>
+              or <code>sudo dnf upgrade docker-log-viewer</code>
+            </p>
+          </section>
+
+          <section class="panel">
+            <h2>Package managers</h2>
+            <p class="sub">Quick install adds the repo. Inspect the script first on production hosts.</p>
+            <div class="tabs" role="tablist" aria-label="Package manager">
+              <button class="tab" type="button" role="tab" id="tab-apt" aria-selected="true" aria-controls="pane-apt">apt</button>
+              <button class="tab" type="button" role="tab" id="tab-dnf" aria-selected="false" aria-controls="pane-dnf">dnf</button>
+            </div>
+            <div class="pane" id="pane-apt" role="tabpanel" aria-labelledby="tab-apt">
+              <div class="block-item">
+                <div class="block-label"><span>Debian / Ubuntu · quick</span><button class="copy-inline" type="button" data-copy="apt-cmd">Copy</button></div>
+                <pre class="snippet" id="apt-cmd">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-apt.sh | sudo bash
+sudo apt-get install docker-log-viewer</pre>
+              </div>
+              <div class="block-item">
+                <div class="block-label"><span>Inspect, then run</span><button class="copy-inline" type="button" data-copy="apt-inspect">Copy</button></div>
+                <pre class="snippet" id="apt-inspect">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-apt.sh -o install-apt.sh
+less install-apt.sh
+sudo bash install-apt.sh
+sudo apt-get install docker-log-viewer</pre>
+              </div>
+              <div class="block-item">
+                <div class="block-label"><span>Manual sources.list</span><button class="copy-inline" type="button" data-copy="apt-manual">Copy</button></div>
+                <pre class="snippet" id="apt-manual">echo 'deb [trusted=yes] https://govindsingh9447.github.io/docker-log-viewer-packages/apt stable main' | sudo tee /etc/apt/sources.list.d/docker-log-viewer.list
+sudo apt-get update
+sudo apt-get install docker-log-viewer</pre>
+              </div>
+            </div>
+            <div class="pane" id="pane-dnf" role="tabpanel" aria-labelledby="tab-dnf" hidden>
+              <div class="block-item">
+                <div class="block-label"><span>RHEL / Fedora / Rocky · quick</span><button class="copy-inline" type="button" data-copy="dnf-cmd">Copy</button></div>
+                <pre class="snippet" id="dnf-cmd">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-yum.sh | sudo bash
+sudo dnf install docker-log-viewer</pre>
+              </div>
+              <div class="block-item">
+                <div class="block-label"><span>Inspect, then run</span><button class="copy-inline" type="button" data-copy="dnf-inspect">Copy</button></div>
+                <pre class="snippet" id="dnf-inspect">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-yum.sh -o install-yum.sh
+less install-yum.sh
+sudo bash install-yum.sh
+sudo dnf install docker-log-viewer</pre>
+              </div>
+              <div class="block-item">
+                <div class="block-label"><span>Manual .repo</span><button class="copy-inline" type="button" data-copy="dnf-manual">Copy</button></div>
+                <pre class="snippet" id="dnf-manual">sudo tee /etc/yum.repos.d/docker-log-viewer.repo &lt;&lt;'EOF'
+[docker-log-viewer]
+name=DockBeacon
+baseurl=https://govindsingh9447.github.io/docker-log-viewer-packages/yum
+enabled=1
+gpgcheck=0
+EOF
+sudo dnf install docker-log-viewer</pre>
+              </div>
+            </div>
+            <p class="browse">
+              Packages are <strong>GPG-signed</strong> when the release pipeline has <code>GPG_PRIVATE_KEY</code> configured (install scripts use <code>signed-by</code> / <code>gpgcheck=1</code>).
+              Always verify <a href="https://govindsingh9447.github.io/docker-log-viewer-packages/SHA256SUMS.txt">SHA256SUMS.txt</a>. Public key: <a href="https://govindsingh9447.github.io/docker-log-viewer-packages/KEY.gpg">KEY.gpg</a> (present on signed publishes).
+            </p>
+          </section>
+
+          <section class="panel" id="configure">
+            <h2>Configure &amp; run</h2>
+            <p class="sub">Config survives upgrades (<code>noreplace</code>).</p>
+            <div class="block-item">
+              <div class="block-label"><span>First boot</span><button class="copy-inline" type="button" data-copy="after-cmd">Copy</button></div>
+              <pre class="snippet" id="after-cmd">sudo nano /etc/docker-log-viewer/docker-log-viewer.env
+# APP_MODE=standalone   # or agent
+# SERVER_NAME=my-host
+# PROJECTS_DIR=/home/ubuntu/backend
+# PORT=9447
+
+sudo systemctl enable --now docker-log-viewer
+# lab / staging:  http://&lt;host&gt;:9447
+# production:     https://logs.example.com  → proxy → 127.0.0.1:9447</pre>
+            </div>
+          </section>
+        </div>
+
+        <aside class="stack">
+          <section class="panel">
+            <h2>Files installed</h2>
+            <p class="sub">After package install.</p>
+            <ul class="paths">
+              <li><span class="path">/usr/bin/docker-log-viewer</span><span class="desc">Server binary</span></li>
+              <li><span class="path">/usr/share/docker-log-viewer/index.html</span><span class="desc">Standalone UI</span></li>
+              <li><span class="path">/etc/docker-log-viewer/docker-log-viewer.env</span><span class="desc">Environment config</span></li>
+              <li><span class="path">/lib/systemd/system/docker-log-viewer.service</span><span class="desc">systemd unit</span></li>
+            </ul>
+          </section>
+
+          <section class="panel" id="modes">
+            <h2>Standalone vs agent</h2>
+            <p class="sub">Same package — flip <code>APP_MODE</code>.</p>
+            <div class="modes">
+              <div class="mode">
+                <strong>standalone</strong>
+                <p>Full UI + API for the control plane.</p>
+              </div>
+              <div class="mode">
+                <strong>agent</strong>
+                <p>API only. Connect from a standalone UI.</p>
+              </div>
+            </div>
+            <p class="sub" style="margin-top:1rem">Access is also a deliberate split.</p>
+            <div class="modes">
+              <div class="mode">
+                <strong>Lab / staging</strong>
+                <p>Open <code>http://&lt;host&gt;:9447</code>. No certificates, no proxy.</p>
+              </div>
+              <div class="mode">
+                <strong>Production</strong>
+                <p>HTTPS reverse proxy → <code>127.0.0.1:9447</code>. Same binary.</p>
+              </div>
+            </div>
+            <div class="block-item" style="margin-top:1rem">
+              <div class="block-label"><span>Agent env</span><button class="copy-inline" type="button" data-copy="agent">Copy</button></div>
+              <pre class="snippet" id="agent">APP_MODE=agent
+SERVER_NAME=prod-docker-1
+CORS_ORIGINS=http://control.example:9447
+UI_URL=http://control.example:9447
+PROJECTS_DIR=/home/ubuntu/backend</pre>
+            </div>
+          </section>
+
+          <section class="panel" id="files">
+            <h2>Package files</h2>
+            <p class="sub">Published by release CI · latest <strong>v0.5.1</strong></p>
+            <details class="pkgs" open>
+              <summary>.deb</summary>
+              <ul class="pkg-list" data-pkg="deb"><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.5.1_amd64.deb">docker-log-viewer_0.5.1_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.5.1_arm64.deb">docker-log-viewer_0.5.1_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.5.0_arm64.deb">docker-log-viewer_0.5.0_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.5.0_amd64.deb">docker-log-viewer_0.5.0_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.4.0_arm64.deb">docker-log-viewer_0.4.0_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.4.0_amd64.deb">docker-log-viewer_0.4.0_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.3.0_arm64.deb">docker-log-viewer_0.3.0_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.3.0_amd64.deb">docker-log-viewer_0.3.0_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.2.2_amd64.deb">docker-log-viewer_0.2.2_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.2.2_arm64.deb">docker-log-viewer_0.2.2_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.2.1_arm64.deb">docker-log-viewer_0.2.1_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.2.1_amd64.deb">docker-log-viewer_0.2.1_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.2.0_amd64.deb">docker-log-viewer_0.2.0_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.2.0_arm64.deb">docker-log-viewer_0.2.0_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.15_amd64.deb">docker-log-viewer_0.1.15_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.15_arm64.deb">docker-log-viewer_0.1.15_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.14_amd64.deb">docker-log-viewer_0.1.14_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.14_arm64.deb">docker-log-viewer_0.1.14_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.13_amd64.deb">docker-log-viewer_0.1.13_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.13_arm64.deb">docker-log-viewer_0.1.13_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.12_arm64.deb">docker-log-viewer_0.1.12_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.12_amd64.deb">docker-log-viewer_0.1.12_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.11_amd64.deb">docker-log-viewer_0.1.11_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.11_arm64.deb">docker-log-viewer_0.1.11_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.10_arm64.deb">docker-log-viewer_0.1.10_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.10_amd64.deb">docker-log-viewer_0.1.10_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.9_amd64.deb">docker-log-viewer_0.1.9_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.9_arm64.deb">docker-log-viewer_0.1.9_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.8_arm64.deb">docker-log-viewer_0.1.8_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.8_amd64.deb">docker-log-viewer_0.1.8_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.7_arm64.deb">docker-log-viewer_0.1.7_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.7_amd64.deb">docker-log-viewer_0.1.7_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.6_arm64.deb">docker-log-viewer_0.1.6_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.6_amd64.deb">docker-log-viewer_0.1.6_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.5_arm64.deb">docker-log-viewer_0.1.5_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.5_amd64.deb">docker-log-viewer_0.1.5_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.4_amd64.deb">docker-log-viewer_0.1.4_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.4_arm64.deb">docker-log-viewer_0.1.4_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.3_amd64.deb">docker-log-viewer_0.1.3_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.3_arm64.deb">docker-log-viewer_0.1.3_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.2_arm64.deb">docker-log-viewer_0.1.2_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.2_amd64.deb">docker-log-viewer_0.1.2_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.1_arm64.deb">docker-log-viewer_0.1.1_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.1_amd64.deb">docker-log-viewer_0.1.1_amd64.deb</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.0_arm64.deb">docker-log-viewer_0.1.0_arm64.deb</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/docker-log-viewer_0.1.0_amd64.deb">docker-log-viewer_0.1.0_amd64.deb</a> <span class="pkg-arch">amd64</span></li></ul>
+            </details>
+            <details class="pkgs">
+              <summary>.rpm</summary>
+              <ul class="pkg-list" data-pkg="rpm"><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.5.1_arm64.rpm">docker-log-viewer_0.5.1_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.5.1_amd64.rpm">docker-log-viewer_0.5.1_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.5.0_amd64.rpm">docker-log-viewer_0.5.0_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.5.0_arm64.rpm">docker-log-viewer_0.5.0_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.4.0_amd64.rpm">docker-log-viewer_0.4.0_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.4.0_arm64.rpm">docker-log-viewer_0.4.0_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.3.0_amd64.rpm">docker-log-viewer_0.3.0_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.3.0_arm64.rpm">docker-log-viewer_0.3.0_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.2.2_arm64.rpm">docker-log-viewer_0.2.2_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.2.2_amd64.rpm">docker-log-viewer_0.2.2_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.2.1_arm64.rpm">docker-log-viewer_0.2.1_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.2.1_amd64.rpm">docker-log-viewer_0.2.1_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.2.0_amd64.rpm">docker-log-viewer_0.2.0_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.2.0_arm64.rpm">docker-log-viewer_0.2.0_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.15_amd64.rpm">docker-log-viewer_0.1.15_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.15_arm64.rpm">docker-log-viewer_0.1.15_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.14_arm64.rpm">docker-log-viewer_0.1.14_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.14_amd64.rpm">docker-log-viewer_0.1.14_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.13_amd64.rpm">docker-log-viewer_0.1.13_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.13_arm64.rpm">docker-log-viewer_0.1.13_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.12_amd64.rpm">docker-log-viewer_0.1.12_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.12_arm64.rpm">docker-log-viewer_0.1.12_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.11_amd64.rpm">docker-log-viewer_0.1.11_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.11_arm64.rpm">docker-log-viewer_0.1.11_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.10_amd64.rpm">docker-log-viewer_0.1.10_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.10_arm64.rpm">docker-log-viewer_0.1.10_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.9_amd64.rpm">docker-log-viewer_0.1.9_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.9_arm64.rpm">docker-log-viewer_0.1.9_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.8_amd64.rpm">docker-log-viewer_0.1.8_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.8_arm64.rpm">docker-log-viewer_0.1.8_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.7_arm64.rpm">docker-log-viewer_0.1.7_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.7_amd64.rpm">docker-log-viewer_0.1.7_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.6_arm64.rpm">docker-log-viewer_0.1.6_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.6_amd64.rpm">docker-log-viewer_0.1.6_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.5_amd64.rpm">docker-log-viewer_0.1.5_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.5_arm64.rpm">docker-log-viewer_0.1.5_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.4_amd64.rpm">docker-log-viewer_0.1.4_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.4_arm64.rpm">docker-log-viewer_0.1.4_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.3_amd64.rpm">docker-log-viewer_0.1.3_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.3_arm64.rpm">docker-log-viewer_0.1.3_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.2_amd64.rpm">docker-log-viewer_0.1.2_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.2_arm64.rpm">docker-log-viewer_0.1.2_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.1_arm64.rpm">docker-log-viewer_0.1.1_arm64.rpm</a> <span class="pkg-arch">arm64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.1_amd64.rpm">docker-log-viewer_0.1.1_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.0_amd64.rpm">docker-log-viewer_0.1.0_amd64.rpm</a> <span class="pkg-arch">amd64</span></li><li><a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/docker-log-viewer_0.1.0_arm64.rpm">docker-log-viewer_0.1.0_arm64.rpm</a> <span class="pkg-arch">arm64</span></li></ul>
+            </details>
+            <p class="browse">
+              <a href="https://govindsingh9447.github.io/docker-log-viewer-packages/apt/pool/main/d/docker-log-viewer/">apt pool</a>
+              ·
+              <a href="https://govindsingh9447.github.io/docker-log-viewer-packages/yum/">yum</a>
+              ·
+              <a href="https://govindsingh9447.github.io/docker-log-viewer-packages/SHA256SUMS.txt">SHA256SUMS</a>
+            </p>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <p class="note">
+      <strong>Private source.</strong> This site hosts packages.
+      Collaborators with repo access can also use <code>gh release download</code>.
+    </p>
+
+    <div class="cta-end">
+      <h2>Start watching your containers</h2>
+      <p>One install. No SaaS account. Logs stay on your network.</p>
+      <a class="btn primary" href="#quick-install">Install DockBeacon</a>
+    </div>
+
+    <footer>
+      <span>
+        <a href="guide.html">User guide</a>
+        ·
+        <a href="#security">Security</a>
+        ·
+        <a href="https://github.com/GovindSingh9447/docker-log-viewer-packages">Packages</a>
+      </span>
+      <span>generated 2026-08-21</span>
+    </footer>
+  </div>
+
+  <script>
+    (function () {
+      function syncThemeMeta() {
+        var meta = document.getElementById("theme-color");
+        if (!meta) return;
+        var cs = getComputedStyle(document.documentElement);
+        meta.setAttribute("content", (cs.getPropertyValue("--theme-meta") || "").trim() || "#0b1220");
+      }
+      function setTheme(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        try { localStorage.setItem("dlv_site_theme", t); } catch (e) {}
+        syncThemeMeta();
+        var btn = document.getElementById("theme-toggle");
+        if (btn) btn.setAttribute("aria-label", t === "light" ? "Switch to dark theme" : "Switch to light theme");
+      }
+      syncThemeMeta();
+      var toggle = document.getElementById("theme-toggle");
+      if (toggle) {
+        toggle.addEventListener("click", function () {
+          var cur = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+          setTheme(cur === "light" ? "dark" : "light");
+        });
+      }
+
+      (function wireMenu() {
+        var nav = document.querySelector(".nav");
+        var btn = document.getElementById("nav-toggle");
+        if (!nav || !btn) return;
+        function setOpen(open) {
+          nav.classList.toggle("is-open", open);
+          btn.setAttribute("aria-expanded", String(open));
+          btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+        btn.addEventListener("click", function () {
+          setOpen(!nav.classList.contains("is-open"));
+        });
+        nav.querySelectorAll(".nav-links a").forEach(function (a) {
+          a.addEventListener("click", function () { setOpen(false); });
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") setOpen(false);
+        });
+      })();
+
+      function wireTabs(sel, map) {
+        const tabs = [...document.querySelectorAll(sel)];
+        tabs.forEach((tab) => {
+          tab.addEventListener("click", () => {
+            tabs.forEach((t) => t.setAttribute("aria-selected", String(t === tab)));
+            Object.entries(map).forEach(([id, pane]) => {
+              if (pane) pane.hidden = id !== tab.id;
+            });
+          });
+        });
+      }
+      wireTabs(".cmd-tab", {
+        "qtab-apt": document.getElementById("qpane-apt"),
+        "qtab-dnf": document.getElementById("qpane-dnf"),
+      });
+      wireTabs('[role="tablist"][aria-label="Package manager"] .tab', {
+        "tab-apt": document.getElementById("pane-apt"),
+        "tab-dnf": document.getElementById("pane-dnf"),
+      });
+      document.querySelectorAll(".copy, .copy-inline").forEach((btn) => {
+        btn.addEventListener("click", async () => {
+          const el = document.getElementById(btn.getAttribute("data-copy"));
+          if (!el) return;
+          try {
+            await navigator.clipboard.writeText(el.textContent);
+            const prev = btn.textContent;
+            btn.textContent = "Copied";
+            setTimeout(() => (btn.textContent = prev), 1100);
+          } catch {
+            btn.textContent = "Select";
+          }
+        });
+      });
+      document.querySelectorAll(".pkg-list").forEach(function (el) {
+        var phDeb = "__" + "DEB_LIST__";
+        var phRpm = "__" + "RPM_LIST__";
+        if (el.textContent.indexOf(phDeb) !== -1 || el.textContent.indexOf(phRpm) !== -1) {
+          var kind = el.getAttribute("data-pkg") === "rpm" ? "yum/" : "apt/pool/main/d/docker-log-viewer/";
+          el.innerHTML = '<li><em>Browse the <a href="' + kind + '">package directory</a>.</em></li>';
+        }
+      });
+    })();
+  </script>
+  <!-- Cloudflare Web Analytics -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dea95b4dbebe4a1e85790f4a9186eb77"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+
+</body>
+</html>

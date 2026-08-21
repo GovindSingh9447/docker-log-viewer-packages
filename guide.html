@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"/>
+  <meta name="description" content="DockBeacon user guide — install, logs, stacks, multi-host agents, and every UI feature explained step by step."/>
+  <meta name="theme-color" id="theme-color" content="#f4f7fb"/>
+  <title>User guide · DockBeacon</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%27%20width%3D%2764%27%20height%3D%2764%27%20viewBox%3D%270%200%2064%2064%27%3E%0A%3Crect%20x%3D%270%27%20y%3D%270%27%20width%3D%2764%27%20height%3D%2764%27%20rx%3D%2710%27%20fill%3D%27%232dd4bf%27%2F%3E%0A%3Ctext%20x%3D%2732%27%20y%3D%2742%27%20text-anchor%3D%27middle%27%20font-family%3D%27Arial%27%20font-size%3D%2726%27%20font-weight%3D%27700%27%20fill%3D%27%23ffffff%27%3EDL%3C%2Ftext%3E%0A%3C%2Fsvg%3E"/>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <script>
+    (function () {
+      try {
+        var t = localStorage.getItem("dlv_site_theme") || "light";
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {
+        document.documentElement.setAttribute("data-theme", "light");
+      }
+    })();
+  </script>
+  <style>
+    :root, html[data-theme="dark"] {
+      --bg: #0b1220; --panel: #141e30; --panel-2: #1a2538; --deep: #0a1220; --inset: #0f1828;
+      --ink: #f3f6fb; --muted: #8fa0b5; --line: #2a364c; --teal: #2dd4bf; --cyan: #38bdf8;
+      --coral: #fb7185; --amber: #fbbf24; --violet: #a78bfa; --teal-ink: #042f2e;
+      --btn-hover: #203049; --border-hover: #3d4d66; --note-bg: #2a2310; --note-line: #6b5724; --note-ink: #f5e0a8;
+      --pre: #d5e8f0; --topbar: linear-gradient(90deg, #2dd4bf, #38bdf8 40%, #fb7185 75%, #fbbf24);
+      --hero-wash: linear-gradient(180deg, #0e1830 0%, #0b1220 38%, #0b1220 100%); --theme-meta: #0b1220;
+      --callout: #123548; --callout-line: #1f5575;
+    }
+    html[data-theme="light"] {
+      --bg: #f4f7fb; --panel: #ffffff; --panel-2: #eef3f9; --deep: #e8eef6; --inset: #f0f4fa;
+      --ink: #122033; --muted: #5a6b80; --line: #d5dee9; --teal: #0d9488; --cyan: #0284c7;
+      --coral: #e11d48; --amber: #d97706; --violet: #7c3aed; --teal-ink: #ffffff;
+      --btn-hover: #e2eaf3; --border-hover: #b8c5d6; --note-bg: #fff8e8; --note-line: #f0d48a; --note-ink: #7a5b12;
+      --pre: #1e3348; --topbar: linear-gradient(90deg, #0d9488, #0284c7 40%, #e11d48 75%, #d97706);
+      --hero-wash: linear-gradient(180deg, #e8f4f8 0%, #f4f7fb 42%, #f4f7fb 100%); --theme-meta: #f4f7fb;
+      --callout: #dbeafe; --callout-line: #7dd3fc;
+    }
+    :root {
+      --font: "Sora", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+      --pad: clamp(1.15rem, 4vw, 2.5rem); --max: 72rem; --radius: 14px; --toc-w: 15rem;
+    }
+    *, *::before, *::after { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; min-height: 100dvh; font-family: var(--font); color: var(--ink); background: var(--bg); line-height: 1.6; }
+    .bg { position: fixed; inset: 0; z-index: -2; background: var(--hero-wash); }
+    .bg::after { content: ""; position: absolute; inset: 0 auto auto 0; width: 100%; height: 6px; background: var(--topbar); }
+    a { color: var(--cyan); text-decoration: none; }
+    a:hover { text-decoration: underline; text-underline-offset: 3px; }
+    code, kbd { font-family: var(--mono); font-size: .88em; }
+    code { color: var(--teal); background: var(--inset); padding: .1em .35em; border-radius: 4px; }
+    kbd { display: inline-block; padding: .15em .45em; border: 1px solid var(--line); border-radius: 5px; background: var(--panel-2); color: var(--ink); font-size: .78em; }
+
+    .nav-shell { position: sticky; top: 0; z-index: 40; padding-top: 6px; background: var(--bg); border-bottom: 1px solid var(--line); }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 1rem; width: min(100%, var(--max)); margin: 0 auto; padding: .85rem var(--pad); min-height: 3.75rem; }
+    .logo { display: inline-flex; align-items: center; gap: .6rem; color: var(--ink); text-decoration: none; font-size: .95rem; font-weight: 700; white-space: nowrap; }
+    .logo:hover { text-decoration: none; }
+    .logo-mark { width: 1.85rem; height: 1.85rem; border-radius: 7px; background: var(--teal); display: grid; place-items: center; color: var(--teal-ink); font-size: .68rem; font-weight: 800; }
+    .nav-end { display: flex; align-items: center; gap: .4rem; flex-shrink: 0; }
+    .nav-links { display: flex; flex-wrap: nowrap; align-items: center; gap: .15rem; font-size: .875rem; font-weight: 550; }
+    .nav-links a { color: var(--ink); opacity: .72; padding: .45rem .7rem; border-radius: 8px; text-decoration: none; white-space: nowrap; }
+    .nav-links a:hover, .nav-links a.active { opacity: 1; background: var(--panel-2); text-decoration: none; }
+    .theme-toggle,
+    .nav-toggle { display: inline-flex; align-items: center; justify-content: center; width: 2.2rem; height: 2.2rem; padding: 0; border-radius: 9px; border: 1px solid var(--line); background: var(--panel); color: var(--ink); cursor: pointer; }
+    .theme-toggle:hover, .nav-toggle:hover { background: var(--panel-2); border-color: var(--border-hover); }
+    .theme-toggle svg, .nav-toggle svg { width: 1.05rem; height: 1.05rem; display: block; }
+    .nav-toggle { display: none; }
+    .nav-toggle .icon-close { display: none; }
+    .nav.is-open .nav-toggle .icon-menu { display: none; }
+    .nav.is-open .nav-toggle .icon-close { display: block; }
+    html[data-theme="light"] .theme-toggle .icon-sun { display: none; }
+    html[data-theme="dark"] .theme-toggle .icon-moon { display: none; }
+    html:not([data-theme]) .theme-toggle .icon-moon { display: none; }
+    @media (max-width: 900px) {
+      .nav { flex-wrap: wrap; gap: .55rem; min-height: 3.5rem; }
+      .nav-toggle { display: inline-flex; }
+      .nav-links {
+        display: none; flex-direction: column; align-items: stretch; width: 100%; order: 3;
+        padding: .15rem 0 .4rem; gap: .3rem;
+      }
+      .nav.is-open .nav-links { display: flex; }
+      .nav-links a { padding: .8rem .9rem; font-size: .95rem; opacity: 1; background: var(--panel); border: 1px solid var(--line); }
+    }
+
+    .layout { display: grid; grid-template-columns: 1fr; gap: 0; width: min(100%, var(--max)); margin: 0 auto; padding: 0 var(--pad) 3rem; }
+    @media (min-width: 980px) {
+      .layout { grid-template-columns: var(--toc-w) 1fr; gap: 2.5rem; align-items: start; }
+    }
+    .toc-wrap { display: none; }
+    @media (min-width: 980px) {
+      .toc-wrap { display: block; position: sticky; top: 5rem; padding: 1.5rem 0; }
+    }
+    .toc { list-style: none; margin: 0; padding: 0; font-size: .82rem; }
+    .toc li { margin: .15rem 0; }
+    .toc a { display: block; padding: .35rem .6rem; border-radius: 6px; color: var(--muted); text-decoration: none; }
+    .toc a:hover { color: var(--ink); background: var(--panel-2); text-decoration: none; }
+    .toc .toc-label { font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: .5rem .6rem .35rem; }
+
+    .hero-guide { padding: 2rem 0 1.5rem; }
+    .hero-guide h1 { margin: 0 0 .5rem; font-size: clamp(1.8rem, 4vw, 2.4rem); letter-spacing: -.03em; }
+    .hero-guide p { margin: 0; max-width: 42rem; color: var(--muted); font-size: 1.02rem; }
+    .badge-row { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; font-family: var(--mono); font-size: .72rem; }
+    .badge { padding: .3rem .65rem; border-radius: 8px; background: var(--panel); border: 1px solid var(--line); color: var(--cyan); }
+
+    section.guide-block { margin-bottom: 2.75rem; scroll-margin-top: 5.5rem; }
+    section.guide-block h2 { margin: 0 0 .65rem; font-size: 1.35rem; letter-spacing: -.02em; padding-top: .5rem; border-top: 1px solid var(--line); }
+    section.guide-block:first-of-type h2 { border-top: 0; padding-top: 0; }
+    section.guide-block h3 { margin: 1.35rem 0 .45rem; font-size: 1.02rem; }
+    section.guide-block p, section.guide-block li { color: var(--muted); font-size: .94rem; }
+    section.guide-block p { margin: 0 0 .85rem; }
+    section.guide-block ul, section.guide-block ol { margin: 0 0 1rem; padding-left: 1.25rem; }
+    section.guide-block li { margin: .35rem 0; }
+
+    .steps { list-style: none; margin: 0 0 1.25rem; padding: 0; display: grid; gap: .85rem; counter-reset: step; }
+    .steps > li { counter-increment: step; position: relative; padding: 1rem 1.1rem 1rem 3.2rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); }
+    .steps > li::before { content: counter(step); position: absolute; left: 1rem; top: 1rem; width: 1.65rem; height: 1.65rem; border-radius: 50%; background: var(--teal); color: var(--teal-ink); font-weight: 700; font-size: .78rem; display: grid; place-items: center; }
+    .steps > li strong { display: block; color: var(--ink); margin-bottom: .25rem; }
+
+    .panel { padding: 1.15rem 1.2rem; border-radius: var(--radius); border: 1px solid var(--line); background: var(--panel); margin: 1rem 0; }
+    .panel h4 { margin: 0 0 .5rem; font-size: .95rem; color: var(--ink); }
+    pre.snippet { margin: .65rem 0 0; padding: .9rem 1rem; border-radius: 10px; border: 1px solid var(--line); background: var(--deep); font-family: var(--mono); font-size: .78rem; line-height: 1.65; color: var(--pre); overflow-x: auto; white-space: pre-wrap; }
+
+    .note { margin: 1rem 0; padding: .9rem 1rem; border-radius: 10px; border: 1px solid var(--note-line); background: var(--note-bg); color: var(--note-ink); font-size: .88rem; }
+    .note strong { color: var(--amber); }
+
+    .figure { margin: 1.25rem 0; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--panel); }
+    .figure img { display: block; width: 100%; height: auto; }
+    .figure figcaption { padding: .75rem 1rem; font-size: .82rem; color: var(--muted); border-top: 1px solid var(--line); }
+
+    .callouts { position: relative; margin: 1.25rem 0; }
+    .callout-list { display: grid; gap: .55rem; margin: 1rem 0 0; }
+    .callout { display: flex; gap: .75rem; align-items: flex-start; padding: .75rem .9rem; border-radius: 10px; border: 1px solid var(--callout-line); background: var(--callout); font-size: .86rem; }
+    .callout-num { flex-shrink: 0; width: 1.5rem; height: 1.5rem; border-radius: 50%; background: var(--teal); color: var(--teal-ink); font-weight: 700; font-size: .72rem; display: grid; place-items: center; }
+    .callout strong { color: var(--ink); }
+
+    .ui-mock { margin: 1rem 0; border-radius: 10px; border: 1px solid var(--line); background: var(--inset); overflow: hidden; font-size: .72rem; }
+    .ui-mock-bar { display: flex; flex-wrap: wrap; gap: .35rem; padding: .5rem .65rem; border-bottom: 1px solid var(--line); background: var(--panel); }
+    .ui-mock-bar span, .ui-mock-chip { padding: .25rem .5rem; border-radius: 6px; border: 1px solid var(--line); background: var(--panel-2); color: var(--muted); }
+    .ui-mock-bar .on { border-color: var(--teal); color: var(--teal); background: color-mix(in srgb, var(--teal) 12%, var(--panel)); }
+    .ui-mock-body { padding: .65rem; font-family: var(--mono); color: var(--muted); line-height: 1.5; }
+    .ui-mock-body .log-line { display: block; }
+    .ui-mock-body .jkey { color: var(--cyan); } .ui-mock-body .jstr { color: var(--teal); } .ui-mock-body .jnum { color: var(--amber); }
+
+    table.guide-table { width: 100%; border-collapse: collapse; font-size: .86rem; margin: 1rem 0; }
+    table.guide-table th, table.guide-table td { padding: .55rem .7rem; border: 1px solid var(--line); text-align: left; }
+    table.guide-table th { background: var(--panel-2); color: var(--ink); font-weight: 650; }
+    table.guide-table td { color: var(--muted); }
+
+    /* Make guide tables scroll on phones instead of overflowing. */
+    @media (max-width: 720px) {
+      table.guide-table {
+        display: block;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        min-width: 520px;
+      }
+    }
+
+    .grid-2 { display: grid; gap: 1rem; }
+    @media (min-width: 640px) { .grid-2 { grid-template-columns: 1fr 1fr; } }
+
+    footer { margin-top: 2rem; padding: 1.4rem 0 2rem; border-top: 1px solid var(--line); color: var(--muted); font-size: .84rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .75rem; }
+    footer a { color: var(--muted); }
+  </style>
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+
+  <div class="nav-shell">
+    <nav class="nav">
+      <a class="logo" href="index.html">
+        <span class="logo-mark">DB</span>
+        DockBeacon
+      </a>
+      <div class="nav-links" id="site-nav">
+        <a href="index.html">Home</a>
+        <a href="index.html#security">Security</a>
+        <a href="index.html#install">Install</a>
+        <a href="guide.html" class="active">Guide</a>
+        <a href="index.html#changelog">Changelog</a>
+        <a href="https://github.com/GovindSingh9447/docker-log-viewer-packages">GitHub</a>
+      </div>
+      <div class="nav-end">
+        <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Toggle color theme">
+          <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+          <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 14.5A8.5 8.5 0 1 1 9.5 3 7 7 0 0 0 21 14.5z"/></svg>
+        </button>
+        <button class="nav-toggle" type="button" id="nav-toggle" aria-controls="site-nav" aria-expanded="false" aria-label="Open menu">
+          <svg class="icon-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </nav>
+  </div>
+
+  <div class="layout">
+    <aside class="toc-wrap" aria-label="On this page">
+      <p class="toc-label">Contents</p>
+      <ol class="toc">
+        <li><a href="#start">Getting started</a></li>
+        <li><a href="#ui-tour">UI tour</a></li>
+        <li><a href="#logs">Viewing logs</a></li>
+        <li><a href="#filter">Filter &amp; search</a></li>
+        <li><a href="#json">JSON highlighting</a></li>
+        <li><a href="#expand">Full-window mode</a></li>
+        <li><a href="#stats">CPU &amp; memory</a></li>
+        <li><a href="#multi-host">Multi-host &amp; groups</a></li>
+        <li><a href="#stacks">Stacks mode</a></li>
+        <li><a href="#settings">Settings &amp; RBAC</a></li>
+        <li><a href="#security">Security</a></li>
+        <li><a href="#production">Production deploy</a></li>
+        <li><a href="#share">Share links</a></li>
+        <li><a href="#shortcuts">Keyboard shortcuts</a></li>
+        <li><a href="#config">Configuration</a></li>
+        <li><a href="#troubleshoot">Troubleshooting</a></li>
+      </ol>
+    </aside>
+
+    <main>
+      <header class="hero-guide">
+        <h1>User guide</h1>
+        <p>Everything about DockBeacon — from first install to multi-host log merges, compose stacks, and power-user shortcuts. Written for v0.5.1.</p>
+        <div class="badge-row">
+          <span class="badge">Standalone + agent</span>
+          <span class="badge">Logs + Stacks</span>
+          <span class="badge">RBAC</span>
+        </div>
+      </header>
+
+      <section class="guide-block" id="start">
+        <h2>Getting started</h2>
+        <p>DockBeacon is a self-hosted web app that replaces juggling SSH sessions and <code>docker logs</code> commands. Install the package, open <code>http://&lt;host&gt;:9447</code>, sign in, pick containers, and stream. That HTTP URL is the supported zero-config path for lab and staging. Production puts TLS on a reverse proxy in front of the same port.</p>
+
+        <ol class="steps">
+          <li>
+            <strong>Install the package</strong>
+            Debian/Ubuntu or RHEL/Fedora — see the <a href="index.html#install">install page</a>.
+            <pre class="snippet">curl -fsSL https://govindsingh9447.github.io/docker-log-viewer-packages/install-apt.sh -o install-apt.sh
+less install-apt.sh
+sudo bash install-apt.sh
+sudo apt-get install docker-log-viewer</pre>
+          </li>
+          <li>
+            <strong>Configure the service</strong>
+            Edit <code>/etc/docker-log-viewer/docker-log-viewer.env</code>, then enable systemd.
+            <pre class="snippet">sudo nano /etc/docker-log-viewer/docker-log-viewer.env
+# APP_MODE=standalone
+# SERVER_NAME=my-host
+# PROJECTS_DIR=/home/ubuntu/projects
+# PORT=9447
+# LISTEN_ADDR=0.0.0.0
+
+sudo systemctl enable --now docker-log-viewer</pre>
+          </li>
+          <li>
+            <strong>Open the UI &amp; sign in</strong>
+            Browse to <code>http://&lt;host&gt;:9447</code>. No TLS setup is required for lower environments. On first boot, a temporary password is printed in <code>journalctl -u docker-log-viewer</code> if you did not set <code>AUTH_PASS</code>.
+            The login screen and header show the installed app version (for example <strong>v0.2.0</strong>) so you can confirm upgrades at a glance.
+          </li>
+          <li>
+            <strong>Select containers → View logs</strong>
+            Check one or more containers in the left sidebar, then click <strong>View logs</strong>. Press <strong>Start live</strong> to tail in real time.
+          </li>
+        </ol>
+
+        <div class="note">
+          <strong>Standalone vs agent.</strong>
+          <code>APP_MODE=standalone</code> serves the full UI + API (your control plane).
+          <code>APP_MODE=agent</code> is API-only on worker hosts — add agents in <strong>Settings → Servers</strong> and stream their logs from one browser tab.
+        </div>
+      </section>
+
+      <section class="guide-block" id="ui-tour">
+        <h2>UI tour</h2>
+        <p>The interface has three main areas: header (server switch, health, role), sidebar (containers or stacks), and the main panel (logs or stack editor).</p>
+
+        <figure class="figure">
+          <img src="demo.png" width="1440" height="900" alt="DockBeacon main interface with sidebar, log toolbar, and live output" loading="lazy"/>
+          <figcaption>Main Logs view — container list on the left, merged live output on the right.</figcaption>
+        </figure>
+
+        <div class="callout-list">
+          <div class="callout"><span class="callout-num">1</span><div><strong>Header</strong> — product name with a quiet <strong>version</strong> beside it (e.g. v0.2.0), switch hosts, health, your RBAC role, refresh, theme, settings, logout.</div></div>
+          <div class="callout"><span class="callout-num">2</span><div><strong>Sidebar · Logs / Stacks</strong> — toggle modes. Logs lists Docker containers; Stacks lists compose projects under <code>PROJECTS_DIR</code>.</div></div>
+          <div class="callout"><span class="callout-num">3</span><div><strong>Container list</strong> — search, include stopped, bulk select (All / Running / Clear), then <strong>View logs</strong>.</div></div>
+          <div class="callout"><span class="callout-num">4</span><div><strong>Log toolbar</strong> — Start live, Pause, Fetch history, Inspect, Restart (operators), Clear, Copy, Download. Set time range and tail size.</div></div>
+          <div class="callout"><span class="callout-num">5</span><div><strong>Stats strip</strong> — per-container CPU % and memory with sparkline history while live.</div></div>
+          <div class="callout"><span class="callout-num">6</span><div><strong>Filter bar</strong> — text filter, log level, regex toggle, JSON pretty, wrap, font size, share link, full-window expand.</div></div>
+          <div class="callout"><span class="callout-num">7</span><div><strong>Log output</strong> — color-coded levels, container tags, clickable UUIDs/IPs, JSON blocks, filter highlights.</div></div>
+        </div>
+
+        <div class="note">
+          <strong>Missing version badge?</strong>
+          Upgrade to <strong>v0.2.0+</strong> (<code>sudo apt-get install --only-upgrade docker-log-viewer</code> or <code>sudo dnf upgrade docker-log-viewer</code>), then hard-refresh the browser.
+          Version comes from the binary (<code>GET /api/info</code>) — a stale install can report an old package while still serving an older UI.
+        </div>
+      </section>
+
+      <section class="guide-block" id="logs">
+        <h2>Viewing logs</h2>
+
+        <h3>Step 1 — Pick containers</h3>
+        <p>Use the search box to filter by name, ID, or image. Enable <strong>Include stopped</strong> to see exited containers. Selected count appears above the list.</p>
+
+        <h3>Step 2 — View logs</h3>
+        <p>Click <strong>View logs</strong> (or press <kbd>Enter</kbd> when containers are checked). The header shows merged container names as chips — click a chip to mute that container’s lines in the stream.</p>
+
+        <h3>Step 3 — Live vs fetch</h3>
+        <ul>
+          <li><strong>Start live</strong> — WebSocket tail; reconnects automatically on drop.</li>
+          <li><strong>Pause</strong> — freeze the stream without disconnecting (buffer keeps filling; resume to catch up).</li>
+          <li><strong>Fetch</strong> — one-shot pull using tail size and time range (Last 15m / 1h / 6h / 24h / custom since-until).</li>
+        </ul>
+
+        <div class="ui-mock" aria-hidden="true">
+          <div class="ui-mock-bar">
+            <span class="on">Start live</span><span>Pause</span><span>Fetch</span><span>Inspect</span><span>Clear</span>
+            <span style="margin-left:auto">Tail 500 · Last 1h</span>
+          </div>
+          <div class="ui-mock-body">
+            <span class="log-line"><span style="color:var(--teal)">[api]</span> GET /health 200</span>
+            <span class="log-line"><span style="color:var(--coral)">[worker]</span> ERROR connection reset</span>
+            <span class="log-line"><span style="color:var(--cyan)">[api]</span> {"level":"info","msg":"ready"}</span>
+          </div>
+        </div>
+
+        <h3>Step 4 — Timestamps &amp; auto-scroll</h3>
+        <p>Toggle <strong>Timestamps</strong> to prefix each line. <strong>Auto-scroll</strong> keeps you at the bottom; when you scroll up, a <strong>↓ New lines</strong> button appears.</p>
+
+        <h3>Copy &amp; download</h3>
+        <p>Use <strong>Copy</strong> for the currently visible buffer, or <strong>Download</strong> to save a text file. Both respect active filters (muted containers and text/level filters).</p>
+
+        <h3>Inspect &amp; restart</h3>
+        <p><strong>Inspect</strong> opens a drawer with container JSON details. <strong>Restart</strong> is visible to <code>operator</code> and <code>admin</code> roles when a single container is active.</p>
+      </section>
+
+      <section class="guide-block" id="filter">
+        <h2>Filter &amp; search</h2>
+        <p>The filter box above the log output searches displayed lines. Press <kbd>/</kbd> anywhere (outside inputs) to focus it.</p>
+
+        <h3>Plain text</h3>
+        <p>Type any substring — matching text is highlighted in amber. Works on the full rendered line including container tags.</p>
+
+        <h3>Regex mode (<code>.*</code> button)</h3>
+        <p>Click the <strong>.*</strong> chip to treat the filter as a JavaScript regular expression. Invalid patterns show a toast and fall back safely. Regex preference is saved and included in share URLs (<code>?regex=1</code>).</p>
+
+        <h3>Log level filter</h3>
+        <p>The level dropdown filters by severity: Errors only, Warnings+, or Info+. Useful when a noisy service floods info lines but you need the failures.</p>
+
+        <h3>Clickable tokens</h3>
+        <p>UUIDs, container IDs, and IP addresses in log text are underlined — click to insert them into the filter instantly.</p>
+      </section>
+
+      <section class="guide-block" id="json">
+        <h2>JSON highlighting</h2>
+        <p>Structured JSON in log lines is detected automatically (brace-matched; Laravel-style <code>[timestamp]</code> prefixes are skipped).</p>
+
+        <h3>Pretty vs compact</h3>
+        <p>Toggle <strong>Pretty JSON</strong> in the filter bar:</p>
+        <ul>
+          <li><strong>On</strong> — indented block with syntax colors (keys, strings, numbers, booleans, null).</li>
+          <li><strong>Off</strong> — inline compact highlighting without extra padding.</li>
+        </ul>
+
+        <div class="ui-mock" aria-hidden="true">
+          <div class="ui-mock-bar"><span class="on">Pretty JSON</span><span>.*</span><span class="on">Wrap</span></div>
+          <div class="ui-mock-body" style="padding:.85rem">
+            {<br/>
+            &nbsp;&nbsp;<span class="jkey">"user"</span>: <span class="jstr">"admin"</span>,<br/>
+            &nbsp;&nbsp;<span class="jkey">"status"</span>: <span class="jnum">200</span>,<br/>
+            &nbsp;&nbsp;<span class="jkey">"ok"</span>: <span class="jnum">true</span><br/>
+            }
+          </div>
+        </div>
+      </section>
+
+      <section class="guide-block" id="expand">
+        <h2>Full-window mode</h2>
+        <p>Click <strong>Expand</strong> in the filter bar (or press <kbd>e</kbd>) for a distraction-free view: only the filter strip and log output remain. Header, sidebar, stats, and main toolbar hide.</p>
+        <ul>
+          <li>Connection status appears as a compact pill in the filter bar (live / paused / error).</li>
+          <li>Press <kbd>Esc</kbd> or <kbd>e</kbd> again to exit.</li>
+          <li>All filter controls (regex, JSON, wrap, font, share) stay available.</li>
+        </ul>
+      </section>
+
+      <section class="guide-block" id="stats">
+        <h2>CPU &amp; memory stats</h2>
+        <p>When live streaming active containers, a stats strip appears below the log header. Each card shows:</p>
+        <ul>
+          <li>Container name and current CPU % / memory usage</li>
+          <li>Mini sparklines for the last ~60 samples (fixed 0–100% scale so graphs stay comparable)</li>
+        </ul>
+        <p>Cards update in place — no duplicate cards when stats refresh. Stats require Docker stats API access on the host.</p>
+      </section>
+
+      <section class="guide-block" id="multi-host">
+        <h2>Multi-host &amp; groups</h2>
+
+        <h3>Architecture</h3>
+        <div class="grid-2">
+          <div class="panel">
+            <h4>Standalone (control plane)</h4>
+            <p style="margin:0;font-size:.88rem;color:var(--muted)"><code>APP_MODE=standalone</code> on one host. Serves UI + API. This is where you browse containers and stacks locally.</p>
+          </div>
+          <div class="panel">
+            <h4>Agent (worker)</h4>
+            <p style="margin:0;font-size:.88rem;color:var(--muted)"><code>APP_MODE=agent</code> on other hosts. API only — no browser UI. Set <code>CORS_ORIGINS</code> to your control plane URL.</p>
+          </div>
+        </div>
+
+        <h3>Add remote servers</h3>
+        <ol class="steps">
+          <li><strong>Open Settings</strong> (header) → <strong>Servers</strong> section.</li>
+          <li><strong>Add display name + URL</strong> e.g. <code>http://10.0.1.5:9447</code>, mode <code>agent</code>.</li>
+          <li><strong>Sign in</strong> when switching hosts — credentials are stored per server in your browser.</li>
+          <li><strong>Use the header dropdown</strong> to switch between standalone and agents.</li>
+        </ol>
+
+        <h3>Host groups</h3>
+        <p>When adding a server, set an optional <strong>Group</strong> (e.g. <code>Production</code>). Servers with the same group name appear as a single merged entry in the server list. Selecting a group streams logs from <em>all</em> hosts in that group into one view — ideal when the same service runs on multiple machines.</p>
+
+        <div class="note">
+          <strong>Tip.</strong> Group names are case-sensitive after trim. Leave group empty for individual host entries.
+        </div>
+      </section>
+
+      <section class="guide-block" id="stacks">
+        <h2>Stacks mode</h2>
+        <p>Switch the sidebar to <strong>Stacks</strong> to manage Docker Compose projects discovered under <code>PROJECTS_DIR</code> on the server. Requires <code>operator</code> or <code>admin</code> role for edits.</p>
+
+        <h3>Tabs</h3>
+        <table class="guide-table">
+          <thead><tr><th>Tab</th><th>Purpose</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Compose YAML</strong></td><td>Edit <code>docker-compose.yml</code> (or project compose file). Save creates a backup first; <strong>Diff</strong> shows changes before write.</td></tr>
+            <tr><td><strong>Env</strong></td><td>Edit <code>.env</code>. Secrets may be masked — toggle <strong>Reveal secrets</strong> to show values.</td></tr>
+            <tr><td><strong>Images</strong></td><td>List local images, set <code>IMAGE_NAME</code>, pull new tags, then <strong>Compose up</strong>.</td></tr>
+            <tr><td><strong>Config</strong></td><td>Edit allowlisted host files (nginx configs, etc.) configured on the server.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Lifecycle buttons</h3>
+        <p>After selecting a project: <strong>Start</strong>, <strong>Stop</strong>, <strong>Restart</strong>, or <strong>Compose up</strong>. Status syncs in the header. Restore from timestamped backups via the backups dropdown.</p>
+
+        <p>Save shortcut in stack editor: <kbd>Ctrl</kbd>+<kbd>S</kbd> / <kbd>⌘</kbd>+<kbd>S</kbd>.</p>
+      </section>
+
+      <section class="guide-block" id="settings">
+        <h2>Settings &amp; RBAC</h2>
+        <p>Open <strong>Settings</strong> from the header.</p>
+
+        <h3>Password</h3>
+        <p>Any signed-in user can change their own password (min 8 characters).</p>
+
+        <h3>Roles</h3>
+        <table class="guide-table">
+          <thead><tr><th>Role</th><th>Can do</th></tr></thead>
+          <tbody>
+            <tr><td><code>viewer</code></td><td>Read logs, inspect containers, switch servers</td></tr>
+            <tr><td><code>operator</code></td><td>Everything viewer + restart containers, edit stacks, compose lifecycle</td></tr>
+            <tr><td><code>admin</code></td><td>Everything operator + manage users and roles</td></tr>
+          </tbody>
+        </table>
+
+        <h3>User management (admin only)</h3>
+        <p>Create users with username, password, and role. Users are stored in the server’s users file (seeded from <code>AUTH_USER</code> / <code>AUTH_PASS</code> on first boot).</p>
+      </section>
+
+      <section class="guide-block" id="security">
+        <h2>Security</h2>
+        <p>Treat DockBeacon as a host admin console. Operator and admin roles can restart containers and edit Compose / <code>.env</code> files — not just read logs.</p>
+
+        <h3>What is implemented</h3>
+        <table class="guide-table">
+          <thead><tr><th>Area</th><th>Behavior</th></tr></thead>
+          <tbody>
+            <tr><td>Access</td><td>HTTP via <code>LISTEN_ADDR</code> + <code>PORT</code> (lab: <code>0.0.0.0:9447</code>). Production: <code>LISTEN_ADDR=127.0.0.1</code> + reverse-proxy HTTPS.</td></tr>
+            <tr><td>Login</td><td>Local bcrypt users and/or OIDC (<code>OIDC_*</code>). Login rate-limited per IP. <code>AUTH_LOCAL=false</code> disables passwords.</td></tr>
+            <tr><td>Session</td><td>HMAC cookie, <code>HttpOnly</code>, <code>SameSite=Lax</code>, <code>COOKIE_SECURE=auto</code>. Also <code>X-Auth-Token</code> / Bearer / Basic.</td></tr>
+            <tr><td>CSRF</td><td>Double-submit cookie <code>dlv_csrf</code> + header <code>X-CSRF-Token</code> on mutating cookie-auth requests.</td></tr>
+            <tr><td>RBAC</td><td><code>viewer</code> / <code>operator</code> / <code>admin</code>. Inspect env secrets masked for viewers.</td></tr>
+            <tr><td>Audit</td><td>JSON lines to journal + <code>AUDIT_LOG_PATH</code>. Admins: <code>GET /api/audit</code>.</td></tr>
+            <tr><td>Agents</td><td>Own users file. <code>CORS_ORIGINS</code> required (fail closed). WebSocket Origin checked.</td></tr>
+            <tr><td>Service user</td><td>systemd <code>User=docker-log-viewer</code>, <code>SupplementaryGroups=docker</code>. Data under <code>/var/lib/docker-log-viewer/</code>.</td></tr>
+            <tr><td>Docker</td><td>Standard Docker client env / socket. Optional docker-socket-proxy for blast-radius reduction.</td></tr>
+            <tr><td>Packages</td><td>GPG-signed apt/yum when CI has signing key; SHA256SUMS always published.</td></tr>
+          </tbody>
+        </table>
+
+        <h3>Still out of scope</h3>
+        <ul>
+          <li>In-process TLS — HTTPS stays on Nginx / ALB</li>
+          <li>SAML (use OIDC IdPs such as Keycloak / Authentik / Google)</li>
+        </ul>
+
+        <div class="note">
+          <strong>Do not expose port 9447 to the public internet.</strong>
+          <code>http://&lt;host&gt;:9447</code> is for trusted networks (lab, staging, VPN). On production, set <code>LISTEN_ADDR=127.0.0.1</code>, put TLS in front, restrict agents to the control-plane network, and grant <code>operator</code> only to people you would give Docker socket access.
+        </div>
+      </section>
+
+      <section class="guide-block" id="production">
+        <h2>Production deployment</h2>
+        <p>The process always speaks HTTP on <code>:9447</code>. That is intentional: zero-config for lower environments, HTTPS as a reverse-proxy concern in production.</p>
+        <p>Production layout: Internet → Nginx/ALB (TLS) → standalone control plane on <code>127.0.0.1:9447</code> → agents on private Docker hosts.</p>
+
+        <pre class="snippet"># /etc/nginx/sites-available/docker-log-viewer
+server {
+    listen 443 ssl http2;
+    server_name logs.example.com;
+
+    # ssl_certificate     /etc/letsencrypt/live/logs.example.com/fullchain.pem;
+    # ssl_certificate_key /etc/letsencrypt/live/logs.example.com/privkey.pem;
+
+    location / {
+        proxy_pass http://127.0.0.1:9447;
+        proxy_http_version 1.1;
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+        proxy_read_timeout 3600s;
+    }
+}</pre>
+
+        <ol class="steps">
+          <li><strong>systemd</strong> — <code>sudo systemctl enable --now docker-log-viewer</code>. Keep config in <code>/etc/docker-log-viewer/docker-log-viewer.env</code>.</li>
+          <li><strong>Firewall</strong> — allow 443 to the proxy. Allow control plane → agent :9447. Deny 9447 from untrusted networks.</li>
+          <li><strong>Agents</strong> — <code>APP_MODE=agent</code>, <code>CORS_ORIGINS=https://logs.example.com</code>, <code>UI_URL=https://logs.example.com</code>.</li>
+          <li><strong>Health</strong> — <code>GET /health</code> (Docker ping). Back up the users file.</li>
+          <li><strong>Upgrades</strong> — <code>apt-get install --only-upgrade docker-log-viewer</code> (env file is <code>noreplace</code>). Roll back from the package pool.</li>
+        </ol>
+      </section>
+
+      <section class="guide-block" id="share">
+        <h2>Share links</h2>
+        <p>Click <strong>Share</strong> in the filter bar to copy a URL encoding your current state:</p>
+        <ul>
+          <li>Selected container IDs (including group merges)</li>
+          <li>Active server / group</li>
+          <li>Filter text and regex mode</li>
+          <li>Live vs paused, tail size, timestamps, wrap, JSON pretty preference</li>
+        </ul>
+        <p>Send the link to a teammate with access — opening it restores the same view (they still authenticate).</p>
+      </section>
+
+      <section class="guide-block" id="shortcuts">
+        <h2>Keyboard shortcuts</h2>
+        <p>Shortcuts work when logged in and not typing in an input (except <kbd>/</kbd> which always focuses the filter).</p>
+        <table class="guide-table">
+          <thead><tr><th>Key</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><kbd>/</kbd></td><td>Focus log filter</td></tr>
+            <tr><td><kbd>Enter</kbd></td><td>View logs (when containers selected)</td></tr>
+            <tr><td><kbd>l</kbd></td><td>Toggle live stream</td></tr>
+            <tr><td><kbd>p</kbd></td><td>Pause / resume</td></tr>
+            <tr><td><kbd>f</kbd></td><td>Fetch logs</td></tr>
+            <tr><td><kbd>c</kbd></td><td>Clear log output</td></tr>
+            <tr><td><kbd>e</kbd></td><td>Toggle full-window expand</td></tr>
+            <tr><td><kbd>Esc</kbd></td><td>Exit expand / close modals / blur input</td></tr>
+            <tr><td><kbd>Ctrl</kbd>+<kbd>S</kbd></td><td>Save stack file (Stacks mode)</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="guide-block" id="config">
+        <h2>Configuration reference</h2>
+        <p>Main environment file: <code>/etc/docker-log-viewer/docker-log-viewer.env</code></p>
+        <table class="guide-table">
+          <thead><tr><th>Variable</th><th>Description</th></tr></thead>
+          <tbody>
+            <tr><td><code>PORT</code></td><td>HTTP listen port (default 9447). Lab/staging: <code>http://&lt;host&gt;:9447</code>. Production: reverse-proxy HTTPS to this port.</td></tr>
+            <tr><td><code>LISTEN_ADDR</code></td><td>Bind address. Lab default <code>0.0.0.0</code>; production prefer <code>127.0.0.1</code> behind a reverse proxy.</td></tr>
+            <tr><td><code>APP_MODE</code></td><td><code>standalone</code> (UI + API) or <code>agent</code> (API only).</td></tr>
+            <tr><td><code>SERVER_NAME</code></td><td>Display name in UI and logs.</td></tr>
+            <tr><td><code>COOKIE_SECURE</code></td><td><code>auto</code> (default), <code>true</code>, or <code>false</code> for the session cookie Secure flag.</td></tr>
+            <tr><td><code>PROJECTS_DIR</code></td><td>Root directory for compose projects (Stacks mode).</td></tr>
+            <tr><td><code>EXTRA_CONFIG_DIRS</code></td><td>Optional allowlisted host dirs for the Stacks <strong>Config</strong> tab (e.g. nginx sites).</td></tr>
+            <tr><td><code>AUTH_USER</code> / <code>AUTH_PASS</code></td><td>Seed admin on first boot only.</td></tr>
+            <tr><td><code>AUTH_LOCAL</code></td><td>Set <code>false</code> to disable password login (OIDC-only).</td></tr>
+            <tr><td><code>USERS_FILE</code></td><td>Path to local users JSON (default under <code>/var/lib/docker-log-viewer/</code>).</td></tr>
+            <tr><td><code>AUDIT_LOG_PATH</code></td><td>Optional audit log file path; admins can also use <code>GET /api/audit</code>.</td></tr>
+            <tr><td><code>OIDC_*</code></td><td>Optional SSO: <code>OIDC_ISSUER</code>, <code>OIDC_CLIENT_ID</code>, <code>OIDC_CLIENT_SECRET</code>, <code>OIDC_REDIRECT_URL</code>, <code>OIDC_ROLES_CLAIM</code>.</td></tr>
+            <tr><td><code>CORS_ORIGINS</code></td><td>Allowed control-plane origins (required on agents; fail-closed when unset).</td></tr>
+            <tr><td><code>UI_URL</code></td><td>Redirect target when hitting an agent root in the browser.</td></tr>
+          </tbody>
+        </table>
+
+        <div class="panel">
+          <h4>Installed paths</h4>
+          <ul style="margin:0;padding-left:1.1rem">
+            <li><code>/usr/bin/docker-log-viewer</code> — binary</li>
+            <li><code>/usr/share/docker-log-viewer/index.html</code> — UI (standalone)</li>
+            <li><code>/lib/systemd/system/docker-log-viewer.service</code> — systemd unit</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="guide-block" id="troubleshoot">
+        <h2>Troubleshooting</h2>
+
+        <h3>Cannot sign in</h3>
+        <p>Check <code>sudo journalctl -u docker-log-viewer -n 50</code> for the bootstrap password. Verify <code>USERS_FILE</code> permissions if you customized auth.</p>
+
+        <h3>Live stream disconnects</h3>
+        <p>The UI auto-reconnects. If it loops, check reverse-proxy WebSocket support or firewall rules on port 9447.</p>
+
+        <h3>Agent not listed / CORS errors</h3>
+        <p>On the agent host set <code>CORS_ORIGINS=http://your-control-host:9447</code> and restart. Add the agent URL in Settings with mode <code>agent</code>.</p>
+
+        <h3>Stacks empty</h3>
+        <p>Ensure <code>PROJECTS_DIR</code> points to a directory containing compose projects and restart the service.</p>
+
+        <h3>OIDC login fails</h3>
+        <p>Confirm <code>OIDC_REDIRECT_URL</code> matches the IdP callback exactly (including <code>https</code>). Check journal for OIDC errors after restart.</p>
+
+        <h3>Stats missing</h3>
+        <p>Stats need running containers and Docker stats access. Stopped containers show no sparklines.</p>
+      </section>
+
+      <footer>
+        <span><a href="index.html">← Back to home</a> · <a href="index.html#install">Install</a></span>
+        <span>Guide for v0.5.1 · 2026-08-21</span>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function () {
+      function syncThemeMeta() {
+        var meta = document.getElementById("theme-color");
+        if (!meta) return;
+        meta.setAttribute("content", (getComputedStyle(document.documentElement).getPropertyValue("--theme-meta") || "").trim() || "#f4f7fb");
+      }
+      function setTheme(t) {
+        document.documentElement.setAttribute("data-theme", t);
+        try { localStorage.setItem("dlv_site_theme", t); } catch (e) {}
+        syncThemeMeta();
+      }
+      syncThemeMeta();
+      var toggle = document.getElementById("theme-toggle");
+      if (toggle) toggle.addEventListener("click", function () {
+        var cur = document.documentElement.getAttribute("data-theme") === "light" ? "light" : "dark";
+        setTheme(cur === "light" ? "dark" : "light");
+      });
+      (function wireMenu() {
+        var nav = document.querySelector(".nav");
+        var btn = document.getElementById("nav-toggle");
+        if (!nav || !btn) return;
+        function setOpen(open) {
+          nav.classList.toggle("is-open", open);
+          btn.setAttribute("aria-expanded", String(open));
+          btn.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+        }
+        btn.addEventListener("click", function () {
+          setOpen(!nav.classList.contains("is-open"));
+        });
+        nav.querySelectorAll(".nav-links a").forEach(function (a) {
+          a.addEventListener("click", function () { setOpen(false); });
+        });
+        document.addEventListener("keydown", function (e) {
+          if (e.key === "Escape") setOpen(false);
+        });
+      })();
+    })();
+  </script>
+  <!-- Cloudflare Web Analytics -->
+  <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "dea95b4dbebe4a1e85790f4a9186eb77"}'></script>
+  <!-- End Cloudflare Web Analytics -->
+
+</body>
+</html>

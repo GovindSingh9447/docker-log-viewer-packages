@@ -1,0 +1,95 @@
+[
+  {
+    "version": "0.5.0",
+    "date": "2026-08-22",
+    "fixes": [
+      "Product renamed to DockBeacon across UI, docs, systemd, and the packages site (package id remains docker-log-viewer).",
+      "Stacks redesign: project header, pill tabs, contextual actions, Edit-before-save, and backup-on-save.",
+      "Fix Env load failures from unreadable .env perms; clear stale Compose content on tab switch.",
+      "Preserve file ownership on save; fail loudly if backup cannot be written; accept comma-separated EXTRA_CONFIG_DIRS.",
+      "Settings as a full page; compact monitoring table; inspect env secrets masked by default."
+    ]
+  },
+  {
+    "version": "0.4.0",
+    "date": "2026-08-21",
+    "fixes": [
+      "Compose editor: client-side YAML lint (js-yaml + offline fallback) with live error bar.",
+      "Unsaved-changes confirmation when leaving Stacks, switching tabs/projects, or toggling Reveal secrets.",
+      "Diff before save masks secret env values until unlocked.",
+      "Image pull streams layer progress into an on-page terminal drawer.",
+      "New-logs pill shows missed count and jump-to-bottom hint during live streams."
+    ]
+  },
+  {
+    "version": "0.3.0",
+    "date": "2026-08-21",
+    "fixes": [
+      "UI polish as DockBeacon: fixed theme toggle (html+body, localStorage, sun/moon icon).",
+      "Settings modal sticky header/footer with ✕, Escape, and backdrop dismiss.",
+      "Primary / secondary / destructive button tokens; tooltips and ⌘K container search.",
+      "Clearer empty states; floating new-logs pill with missed-line count."
+    ]
+  },
+  {
+    "version": "0.2.2",
+    "date": "2026-08-20",
+    "fixes": [
+      "Move app version beside the brand title in the header",
+      "docs(site): feature v0.2.0 changelog and document version badge"
+    ]
+  },
+  {
+    "version": "0.2.0",
+    "date": "2026-08-21",
+    "fixes": [
+      "Production hardening: non-root systemd user, LISTEN_ADDR, COOKIE_SECURE=auto, CSRF tokens, WS Origin checks, agent CORS fail-closed.",
+      "Audit log + GET /api/audit; login rate limit; inspect env secrets masked for viewers.",
+      "Optional OIDC SSO (OIDC_* env); AUTH_LOCAL=false for SSO-only.",
+      "GPG-signed apt/yum when GPG_PRIVATE_KEY is set in release CI.",
+      "App version visible in the UI header and on the login screen (API: /api/info, /api/me, /health, login)."
+    ]
+  },
+  {
+    "version": "0.1.14",
+    "date": "2026-08-10",
+    "fixes": [
+      "Packages site: architecture, security, production deploy, inspect-then-run install, SHA256SUMS, and filled package lists.",
+      "Regex filter toggle (.*) for advanced log search, saved in prefs and share links.",
+      "Pretty / compact JSON highlighting in the log stream (brace-matched, skips Laravel timestamps).",
+      "Optional host groups in Settings — merge logs across servers in the same group.",
+      "Metric sparklines on container stats with a fixed 0–100% scale.",
+      "Full-window expand focuses on the filter bar and logs only (Esc / e).",
+      "Packages site: light/dark themes, user guide, and Cloudflare Web Analytics."
+    ]
+  },
+  {
+    "version": "0.1.12",
+    "date": "2026-08-08",
+    "fixes": [
+      "Packages site shows latest version badge and a What's new changelog (including v0.1.11 UI fixes)."
+    ]
+  },
+  {
+    "version": "0.1.11",
+    "date": "2026-08-08",
+    "fixes": [
+      "Clearing or unchecking all containers resets header chips, title, live stream, and stats (no stale “N containers (merged)” labels).",
+      "View logs button stays readable on hover and when disabled (primary teal + white text)."
+    ]
+  },
+  {
+    "version": "0.1.10",
+    "date": "2026-08-08",
+    "fixes": [
+      "Clearer fictional product demo screenshot on the packages landing page."
+    ]
+  },
+  {
+    "version": "0.1.9",
+    "date": "2026-08-08",
+    "fixes": [
+      "Added product demo screenshot slot to the packages site."
+    ]
+  }
+]
