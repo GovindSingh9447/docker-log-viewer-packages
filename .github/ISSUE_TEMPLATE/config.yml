@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Install guide and FAQ
+    url: https://dock-beacon.web.app/guide.html
+    about: Setup, agents, reverse proxy, PM2, and common questions
+  - name: Upgrade help
+    url: https://dock-beacon.web.app/#upgrade
+    about: Upgrade commands, env file prompt, 502 after upgrade

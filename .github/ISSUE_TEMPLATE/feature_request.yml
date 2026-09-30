@@ -1,0 +1,22 @@
+name: Feature request
+description: Suggest an idea or improvement for DockBeacon
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem are you trying to solve?
+      placeholder: When I ..., I have to ...
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What would you like DockBeacon to do?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: What do you use today instead?
+      placeholder: docker logs over SSH, Dozzle, Portainer, ...
