@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /testing/
+Sitemap: https://govindsingh9447.github.io/docker-log-viewer-packages/sitemap.xml
+Sitemap: https://govindsingh9447.github.io/docker-log-viewer-packages/sitemap.txt

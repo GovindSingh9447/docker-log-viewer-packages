@@ -1,0 +1,1 @@
+deb [signed-by=/usr/share/keyrings/docker-log-viewer.gpg] https://govindsingh9447.github.io/docker-log-viewer-packages/apt stable main

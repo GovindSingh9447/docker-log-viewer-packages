@@ -1,0 +1,70 @@
+DockBeacon Free Use License, Version 1.0
+
+Copyright (c) 2026 Govind Singh. All rights reserved.
+
+"DockBeacon" (also distributed as "docker-log-viewer") means the software,
+packages, web interface, documentation, and updates published by Govind Singh
+("the Author") at https://dock-beacon.web.app and
+https://govindsingh9447.github.io/docker-log-viewer-packages/.
+
+1. Free use
+
+   You may download, install, and use DockBeacon free of charge, on any number
+   of servers, for personal use or for the internal operations of your company
+   or organization, including commercial organizations.
+
+2. Copies
+
+   You may keep copies and mirror the unmodified official packages inside your
+   own organization (for example on an internal package mirror).
+
+3. Restrictions
+
+   Unless the Author gives you written permission, you may not:
+
+   a. sell, rent, lease, sublicense, or otherwise charge for DockBeacon itself;
+   b. offer DockBeacon, or a product built from it, to third parties as a
+      hosted, managed, or software-as-a-service offering;
+   c. rebrand DockBeacon, or remove or change its name, copyright notices, or
+      this license;
+   d. publicly redistribute modified versions, or distribute the packages
+      outside your organization other than by linking to the official sites;
+   e. reverse engineer, decompile, or disassemble DockBeacon to build a
+      competing product, except to the extent applicable law expressly allows
+      it despite this restriction.
+
+4. Trademarks
+
+   The name "DockBeacon" and its logo belong to the Author. This license does
+   not grant any right to use them, except to truthfully say that you use
+   DockBeacon.
+
+5. Feedback
+
+   If you send suggestions or bug reports, the Author may use them freely,
+   without obligation to you.
+
+6. Termination
+
+   This license ends automatically if you break its terms. When it ends, you
+   must stop using DockBeacon and delete your copies.
+
+7. No warranty
+
+   DOCKBEACON IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+   PARTICULAR PURPOSE, AND NON-INFRINGEMENT.
+
+8. Limitation of liability
+
+   TO THE MAXIMUM EXTENT PERMITTED BY LAW, THE AUTHOR IS NOT LIABLE FOR ANY
+   CLAIM, DAMAGES, OR OTHER LIABILITY, INCLUDING LOSS OF DATA OR DOWNTIME,
+   ARISING FROM OR RELATED TO DOCKBEACON OR ITS USE.
+
+9. Changes
+
+   The Author may publish future versions under different terms, including an
+   open-source or source-available license. Versions you already received stay
+   under the terms they were released with.
+
+Contact: govindkrsingh0605@gmail.com

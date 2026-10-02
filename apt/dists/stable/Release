@@ -1,0 +1,18 @@
+Origin: docker-log-viewer
+Label: docker-log-viewer
+Suite: stable
+Codename: stable
+Architectures: amd64 arm64
+Components: main
+Description: DockBeacon apt repository
+Date: Fri, 02 Oct 2026 18:23:07 +0000
+MD5Sum:
+ 6e5c36c968fd893a90f09849b8c6760a    18987 main/binary-amd64/Packages
+ cc564628cf2cd269ac47575a85dba4b9     3494 main/binary-amd64/Packages.gz
+ 1ffc7051c514770901b96d55cfcbb55a    18357 main/binary-arm64/Packages
+ 89cb68e7126c0be14aaa2f51fad4fe62     3465 main/binary-arm64/Packages.gz
+SHA256:
+ 6cf6c08a8817f8d03ff3a35c1a2f2c1cdded12b8fa16631d34e76c892b07610f    18987 main/binary-amd64/Packages
+ 98b3f1ed440f251edc2b7d69dade4e477be02bdbfa70f4ce9bb680bc02dc1ae0     3494 main/binary-amd64/Packages.gz
+ 59e60bc6ff463a23e1b2c879df2ec9e18e8b856ab5ee4ba610f2f13cc8339867    18357 main/binary-arm64/Packages
+ 273c7d53c6d4ab6abe521ccb3ec638f148557a3ea49e95e59136d319cc98a3b5     3465 main/binary-arm64/Packages.gz

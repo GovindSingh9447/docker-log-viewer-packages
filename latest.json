@@ -1,0 +1,12 @@
+{
+  "version": "0.7.0",
+  "date": "2026-10-02",
+  "url": "https://govindsingh9447.github.io/docker-log-viewer-packages/#upgrade",
+  "notes": [
+    "Alerts: get notified when a container exits unexpectedly, turns unhealthy, crash-loops, or nears its memory limit, when a PM2 app errors or keeps restarting, when host CPU, memory, or disk stays high, when Docker is unreachable, or when an agent stops answering. Admins set rules and channels in Settings \u2192 Alerts.",
+    "Alert channels: Slack, Microsoft Teams, Discord, or any JSON webhook, with a Test button, optional @here / @channel mentions, and Resolved messages. Webhook URLs stay on the server and are never shown again after saving.",
+    "Alerts button in the header shows how many alerts are new. Open it to see what is active (new ones tagged New) and recent history.",
+    "Diagnose: one click explains why a container is unhealthy from its health check, exit code, restarts, memory, recent errors, sibling containers, and host disk. Read-only, so viewers can use it.",
+    "Timeline: what changed and who did it. Container starts, stops, crashes, and health changes are recorded (kept 14 days, EVENTS_RETENTION_DAYS) and shown in Diagnose and System status, together with restarts, redeploys, and env edits from the audit log."
+  ]
+}

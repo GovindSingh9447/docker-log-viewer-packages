@@ -1,0 +1,37 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Origin: docker-log-viewer
+Label: docker-log-viewer
+Suite: stable
+Codename: stable
+Architectures: amd64 arm64
+Components: main
+Description: DockBeacon apt repository
+Date: Fri, 02 Oct 2026 18:23:27 +0000
+MD5Sum:
+ ff8c409af56d1c8d02584c73a525c58c    21195 main/binary-amd64/Packages
+ 5670b144ba5c18da1a78c2a13baabbdc     3822 main/binary-amd64/Packages.gz
+ 7ab71d2cd960552a0ad62763764715ea    20565 main/binary-arm64/Packages
+ 5faf3288910f724f2f543eb993eb203b     3797 main/binary-arm64/Packages.gz
+SHA256:
+ 20d6bb14c27bcda3cbd0b17c74340ec03f19b119b112461526acf7b2a4366b69    21195 main/binary-amd64/Packages
+ e2ce061f572578d69dcdcb3d0158ef91624168382ff3c6c51dbde33261aa1292     3822 main/binary-amd64/Packages.gz
+ be077c1ed240af1182810c6cc30cf318fe76a21b41c34266d84c9efd968d7a07    20565 main/binary-arm64/Packages
+ 5c34f19949ef117eee40bdca36af7ee61028aa76bd6cf6d341563f3f7423bf0c     3797 main/binary-arm64/Packages.gz
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEBsTuvYGV0TKdbJiuvmmhaWuyIAIFAmq/9p8ACgkQvmmhaWuy
+IAJYRg/+JTemwCM2SpVW0M6cwyHDT7zfOwU8JRg/4sIDOsNqgrreX422kwOdoHoY
+AEhbvkbF+e7s+CQJ3qZvC47EinkAikUC7ZsbrvQkgYn3176q8e0klvoPtQzaKZ+f
+oXfVkotZsYj7uHU1UjodnO+/3kg6VTfLN0sfMptj2vQnfrYMVuRibfh1RwHmNJ0A
+vZzazho2NgvSSC9mkQ4YZpjrgcWXP5+fqVWKenjAeLplCwFI8ovgU8hqelryG3i9
+Y4cDBmELXc1qfnm/xyJEhH75CFx1ZBK/P8zkRvnDo6KW82I7kx78Nbny4lxxmui8
+Ihm7G3T3cP7qTrw97aNosZs4Rh9Uw1/zwRPUj9Bs6TcM0CMVO06Bk3+30JtekNWB
+vEHRQiHT1fIGcn2/0H/90mS86/WteDhgCezLLl6wW4o26RqQ7c0v81huCDDl7swH
+QdSKvfVtvbaB275RiCrruEQywKp6ZFbGyP7ESumdNuoTxN+QBaou+HwJKTyChinF
+y2qcOZI7hzxFOsas7RXt6thVn6kLKoNZOne0pqKsOKkE64WMH6jwkwEjHyXWku9w
+I9pPMbl9+Wg8ghOj6vmnxJVxoWqpfRmLnea0Qwp3QsojiUJ5F9ZjFY4Q2BCUcaFF
+IaciVZ0tRHjR+lggYw8YP804NWq9qJPpUmJHmQnIBQnbn7+bxIA=
+=mENC
+-----END PGP SIGNATURE-----
